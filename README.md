@@ -20,6 +20,8 @@ This repository contains the following files:
     |   |-- README.md
     |-- LICENSE
     |-- README.md
+    
+## Directories
 
 **Case\-study:** A specific endomorphism is defined and studied in depth. We find its fixed points, compute the multipliers, find all other endomorphisms that share the same multipliers that are not on the invariant line, and compute the *hidden relations* for certain invariant functions of the multipliers for the fixed points on the invariant line.
 
