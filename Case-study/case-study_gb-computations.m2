@@ -7,8 +7,9 @@ printWidth = 0;
 kk = QQ;
 R = kk[w_0..w_2, x,y, c_0..c_5,a,b, p,q,r,s,L, MonomialOrder => {3, 10, 5}];
 
--- These is the spectra of our case study:
-------------------------------------------
+-- INPUT: SPECIFY RATIONAL VALUES FOR THE VARIABLES BELOW:
+----------------------------------------------------------
+-- (These are the values for the "case study":)
 t_0 = -4
 t_1 = -3/5
 t_2 = 4/3
@@ -103,6 +104,5 @@ print toString hp;
 print toString hq;
 print toString hr;
 print toString hs;
-
 
 exit
