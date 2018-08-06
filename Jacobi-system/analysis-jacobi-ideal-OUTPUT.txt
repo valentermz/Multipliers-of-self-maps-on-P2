@@ -1,0 +1,392 @@
+-- -*-mode: M2-*-
+
++ M2 --no-readline --print-width 98
+Macaulay2, version 1.9.2
+with packages: ConwayPolynomials, Elimination, IntegralClosure, LLLBases, PrimaryDecomposition,
+               ReesAlgebra, TangentCone
+
+i1 : -- OBJECTIVE: find (a,b) in terms of d_0..d_3, t_0..t_3, then find (x,y)
+------------------------------------------------------------------------
+
+-- This is done in a series of sessions.
+-- We never compute the whole Gröbner basis,
+-- but instead stop whenever it is convenient.
+-- The output of the previous session is added
+-- as a generator of the ideal of the next session.
+-- Note that the order of the variables and
+-- the monomial order changes from session to session.
+
+     -- Part1: 
+     -- Get the quadratic equation on b 
+     ----------------------------------
+     
+     printWidth = 0
+
+o1 = 0
+
+i2 : gbTrace = 2
+
+o2 = 2
+
+i3 : 
+     kk = QQ
+
+o3 = QQ
+
+o3 : Ring
+
+i4 : R = kk[x,y, z_0..z_3,r,s,h, a,b, t_0..t_3,d_0..d_3, MonomialOrder => Eliminate 10]
+
+o4 = R
+
+o4 : PolynomialRing
+
+i5 : 
+     -- Equationes derived from Jacobi formula using g = l, x, y, 1, tr DH
+     E_0 = a^2*b*d_1*d_2*d_3*x + a*b^2*d_1*d_2*d_3*y + a^2*d_0*d_1*d_3*x + a*b*d_0*d_2*d_3*x + a^2*d_1*d_2*d_3*x + a*b*d_1*d_2*d_3*x + a*b*d_0*d_1*d_3*y + b^2*d_0*d_2*d_3*y + a*b*d_1*d_2*d_3*y + b^2*d_1*d_2*d_3*y + a*b*d_0*d_1*d_2 + a*b*d_1*d_2*d_3 + a*d_0*d_1*d_3*x + a*d_0*d_2*d_3*x + a*d_1*d_2*d_3*x + b*d_0*d_1*d_3*y + b*d_0*d_2*d_3*y + b*d_1*d_2*d_3*y + a*d_0*d_1*d_2 + b*d_0*d_1*d_2 + a*d_0*d_1*d_3 + b*d_0*d_2*d_3 + a*d_1*d_2*d_3 + b*d_1*d_2*d_3 + d_0*d_1*d_2 + d_0*d_1*d_3 + d_0*d_2*d_3 + d_1*d_2*d_3;
+
+i6 : E_1 = a^2*d_3*x^2 + 2*a*b*d_3*x*y + b^2*d_3*y^2 + a^2*d_1*x + 2*a*d_1*x + 2*a*d_3*x + 2*b*d_3*y + d_1*x + d_3;
+
+i7 : E_2 = a^2*d_3*x^2 + 2*a*b*d_3*x*y + b^2*d_3*y^2 + b^2*d_2*y + 2*a*d_3*x + 2*b*d_2*y + 2*b*d_3*y + d_2*y + d_3;
+
+i8 : E_3 = a^4*b^2*d_1*d_2*d_3*x^2 + 2*a^3*b^3*d_1*d_2*d_3*x*y + a^2*b^4*d_1*d_2*d_3*y^2 + 2*a^4*b*d_1*d_2*d_3*x^2 + 2*a^3*b^2*d_1*d_2*d_3*x^2 + 4*a^3*b^2*d_1*d_2*d_3*x*y + 4*a^2*b^3*d_1*d_2*d_3*x*y + 2*a^2*b^3*d_1*d_2*d_3*y^2 + 2*a*b^4*d_1*d_2*d_3*y^2 + 2*a^3*b^2*d_1*d_2*d_3*x + a^4*d_0*d_1*d_3*x^2 + a^2*b^2*d_0*d_2*d_3*x^2 + a^4*d_1*d_2*d_3*x^2 + 4*a^3*b*d_1*d_2*d_3*x^2 + a^2*b^2*d_1*d_2*d_3*x^2 + 2*a^2*b^3*d_1*d_2*d_3*y + 2*a^3*b*d_0*d_1*d_3*x*y + 2*a*b^3*d_0*d_2*d_3*x*y + 2*a^3*b*d_1*d_2*d_3*x*y + 8*a^2*b^2*d_1*d_2*d_3*x*y + 2*a*b^3*d_1*d_2*d_3*x*y + a^2*b^2*d_0*d_1*d_3*y^2 + b^4*d_0*d_2*d_3*y^2 + a^2*b^2*d_1*d_2*d_3*y^2 + 4*a*b^3*d_1*d_2*d_3*y^2 + b^4*d_1*d_2*d_3*y^2 + 4*a^3*b*d_1*d_2*d_3*x + 4*a^2*b^2*d_1*d_2*d_3*x + 2*a^3*d_0*d_1*d_3*x^2 + 2*a^2*b*d_0*d_2*d_3*x^2 + 2*a^3*d_1*d_2*d_3*x^2 + 2*a^2*b*d_1*d_2*d_3*x^2 + 4*a^2*b^2*d_1*d_2*d_3*y + 4*a*b^3*d_1*d_2*d_3*y + 4*a^2*b*d_0*d_1*d_3*x*y + 4*a*b^2*d_0*d_2*d_3*x*y + 4*a^2*b*d_1*d_2*d_3*x*y + 4*a*b^2*d_1*d_2*d_3*x*y + 2*a*b^2*d_0*d_1*d_3*y^2 + 2*b^3*d_0*d_2*d_3*y^2 + 2*a*b^2*d_1*d_2*d_3*y^2 + 2*b^3*d_1*d_2*d_3*y^2 + a^2*b^2*d_0*d_1*d_2 + a^2*b^2*d_1*d_2*d_3 + 2*a^3*d_0*d_1*d_3*x + 2*a*b^2*d_0*d_2*d_3*x + 2*a^3*d_1*d_2*d_3*x + 8*a^2*b*d_1*d_2*d_3*x + 2*a*b^2*d_1*d_2*d_3*x + a^2*d_0*d_1*d_3*x^2 + a^2*d_0*d_2*d_3*x^2 + a^2*d_1*d_2*d_3*x^2 + 2*a^2*b*d_0*d_1*d_3*y + 2*b^3*d_0*d_2*d_3*y + 2*a^2*b*d_1*d_2*d_3*y + 8*a*b^2*d_1*d_2*d_3*y + 2*b^3*d_1*d_2*d_3*y + 2*a*b*d_0*d_1*d_3*x*y + 2*a*b*d_0*d_2*d_3*x*y + 2*a*b*d_1*d_2*d_3*x*y + b^2*d_0*d_1*d_3*y^2 + b^2*d_0*d_2*d_3*y^2 + b^2*d_1*d_2*d_3*y^2 + 2*a^2*b*d_0*d_1*d_2 + 2*a*b^2*d_0*d_1*d_2 + 2*a^2*b*d_1*d_2*d_3 + 2*a*b^2*d_1*d_2*d_3 + 4*a^2*d_0*d_1*d_3*x + 4*a*b*d_0*d_2*d_3*x + 4*a^2*d_1*d_2*d_3*x + 4*a*b*d_1*d_2*d_3*x + 4*a*b*d_0*d_1*d_3*y + 4*b^2*d_0*d_2*d_3*y + 4*a*b*d_1*d_2*d_3*y + 4*b^2*d_1*d_2*d_3*y + a^2*d_0*d_1*d_2 + 4*a*b*d_0*d_1*d_2 + b^2*d_0*d_1*d_2 + a^2*d_0*d_1*d_3 + b^2*d_0*d_2*d_3 + a^2*d_1*d_2*d_3 + 4*a*b*d_1*d_2*d_3 + b^2*d_1*d_2*d_3 + 2*a*d_0*d_1*d_3*x + 2*a*d_0*d_2*d_3*x + 2*a*d_1*d_2*d_3*x + 2*b*d_0*d_1*d_3*y + 2*b*d_0*d_2*d_3*y + 2*b*d_1*d_2*d_3*y + 2*a*d_0*d_1*d_2 + 2*b*d_0*d_1*d_2 + 2*a*d_0*d_1*d_3 + 2*b*d_0*d_2*d_3 + 2*a*d_1*d_2*d_3 + 2*b*d_1*d_2*d_3 + d_0*d_1*d_2 + d_0*d_1*d_3 + d_0*d_2*d_3 + d_1*d_2*d_3;
+
+i9 : E_4 = a^2*b*d_1*d_2*d_3*t_0*x + a*b^2*d_1*d_2*d_3*t_0*y + a^2*d_1*d_2*d_3*t_0*x + a*b*d_1*d_2*d_3*t_0*x + a*b*d_0*d_2*d_3*t_1*x + a^2*d_0*d_1*d_3*t_2*x + a*b*d_1*d_2*d_3*t_0*y + b^2*d_1*d_2*d_3*t_0*y + b^2*d_0*d_2*d_3*t_1*y + a*b*d_0*d_1*d_3*t_2*y + a*b*d_1*d_2*d_3*t_0 + a*b*d_0*d_1*d_2*t_3 + a*d_1*d_2*d_3*t_0*x + a*d_0*d_2*d_3*t_1*x + a*d_0*d_1*d_3*t_2*x + b*d_1*d_2*d_3*t_0*y + b*d_0*d_2*d_3*t_1*y + b*d_0*d_1*d_3*t_2*y + a*d_1*d_2*d_3*t_0 + b*d_1*d_2*d_3*t_0 + b*d_0*d_2*d_3*t_1 + a*d_0*d_1*d_3*t_2 + a*d_0*d_1*d_2*t_3 + b*d_0*d_1*d_2*t_3 + d_1*d_2*d_3*t_0 + d_0*d_2*d_3*t_1 + d_0*d_1*d_3*t_2 + d_0*d_1*d_2*t_3;
+
+i10 : 
+      -- Non-degeneracy assumptions: d_k, a+1, b_1, x+y-1 are never zero
+      gc_0 = d_0*z_0-1;
+
+i11 : gc_1 = d_1*z_1-1;
+
+i12 : gc_2 = d_2*z_2-1;
+
+i13 : gc_3 = d_3*z_3-1;
+
+i14 : gc_4 = (a+1)*r-1;
+
+i15 : gc_5 = (b+1)*s-1;
+
+i16 : gc_6 = (x+y-1)*h-1;
+
+i17 : GC = {gc_0,gc_1,gc_2,gc_3,gc_4,gc_5,gc_6};
+
+i18 : 
+      -- J is the idea of relations plus genericity conditions
+      J = ideal(E_0,E_1,E_2,E_3,E_4) + ideal(GC);
+
+o18 : Ideal of R
+
+i19 : 
+      -- Looking for the quadratic equation in b only
+      time GB = gens gb(J, SubringLimit => 1);  --stop as soon as one element is found
+
+   -- [gb]{2}(7){5}(2){6}(6){7}(17){8}(31){9}(80){10}(148){11}(398){12}(998)
+   -- {13}(1911){14}(3100){15}(3688){16}(3944){17}(4350){18}(3765)number of (nonminimal) gb elements = 5617
+   -- number of monomials                = 559881
+   --      -- used 95.3076 seconds
+
+              1       884
+o19 : Matrix R  <--- R
+
+i20 : q = GB_(0,0);
+
+i21 : toString factor q
+
+o21 = (b^2*t_1^2*d_0*d_2^2-2*b^2*t_1*t_3*d_0*d_2^2+b^2*t_3^2*d_0*d_2^2+b^2*t_0^2*d_1*d_2^2-2*b^2*t_0*t_3*d_1*d_2^2+b^2*t_3^2*d_1*d_2^2+b^2*t_0^2*d_2^2*d_3-2*b^2*t_0*t_1*d_2^2*d_3+b^2*t_1^2*d_2^2*d_3+2*b*t_0*t_2*d_0*d_1*d_2-2*b*t_0*t_3*d_0*d_1*d_2-2*b*t_2*t_3*d_0*d_1*d_2+2*b*t_3^2*d_0*d_1*d_2+2*b*t_1^2*d_0*d_2^2-4*b*t_1*t_3*d_0*d_2^2+2*b*t_3^2*d_0*d_2^2+2*b*t_0^2*d_1*d_2^2-4*b*t_0*t_3*d_1*d_2^2+2*b*t_3^2*d_1*d_2^2-2*b*t_0*t_1*d_0*d_2*d_3+2*b*t_1^2*d_0*d_2*d_3+2*b*t_0*t_2*d_0*d_2*d_3-2*b*t_1*t_2*d_0*d_2*d_3+2*b*t_0^2*d_2^2*d_3-4*b*t_0*t_1*d_2^2*d_3+2*b*t_1^2*d_2^2*d_3+t_2^2*d_0^2*d_1-2*t_2*t_3*d_0^2*d_1+t_3^2*d_0^2*d_1+t_1^2*d_0^2*d_2-2*t_1*t_3*d_0^2*d_2+t_3^2*d_0^2*d_2+2*t_0*t_2*d_0*d_1*d_2-2*t_0*t_3*d_0*d_1*d_2-2*t_2*t_3*d_0*d_1*d_2+2*t_3^2*d_0*d_1*d_2+t_1^2*d_0*d_2^2-2*t_1*t_3*d_0*d_2^2+t_3^2*d_0*d_2^2+t_0^2*d_1*d_2^2-2*t_0*t_3*d_1*d_2^2+t_3^2*d_1*d_2^2+t_1^2*d_0^2*d_3-2*t_1*t_2*d_0^2*d_3+t_2^2*d_0^2*d_3-2*t_0*t_1*d_0*d_2*d_3+2*t_1^2*d_0*d_2*d_3+2*t_0*t_2*d_0*d_2*d_3-2*t_1*t_2*d_0*d_2*d_3+t_0^2*d_2^2*d_3-2*t_0*t_1*d_2^2*d_3+t_1^2*d_2^2*d_3)
+
+i22 : --output appended at the end of this file
+      
+      restart
+Macaulay2, version 1.9.2
+with packages: ConwayPolynomials, Elimination, IntegralClosure, LLLBases, PrimaryDecomposition,
+               ReesAlgebra, TangentCone
+
+i1 : -- Part2:
+     -- Get a linear equation on a,b
+     -------------------------------
+     
+     printWidth = 0
+
+o1 = 0
+
+i2 : gbTrace = 2
+
+o2 = 2
+
+i3 : 
+     kk = QQ
+
+o3 = QQ
+
+o3 : Ring
+
+i4 : R = kk[z_0..z_3,r,s,h, x,y, a,b, t_0..t_3,d_0..d_3, MonomialOrder => Eliminate 9]
+
+o4 = R
+
+o4 : PolynomialRing
+
+i5 : 
+     -- Equationes derived from Jacobi formula using g = l, x, y, 1, tr DH
+     E_0 = a^2*b*d_1*d_2*d_3*x + a*b^2*d_1*d_2*d_3*y + a^2*d_0*d_1*d_3*x + a*b*d_0*d_2*d_3*x + a^2*d_1*d_2*d_3*x + a*b*d_1*d_2*d_3*x + a*b*d_0*d_1*d_3*y + b^2*d_0*d_2*d_3*y + a*b*d_1*d_2*d_3*y + b^2*d_1*d_2*d_3*y + a*b*d_0*d_1*d_2 + a*b*d_1*d_2*d_3 + a*d_0*d_1*d_3*x + a*d_0*d_2*d_3*x + a*d_1*d_2*d_3*x + b*d_0*d_1*d_3*y + b*d_0*d_2*d_3*y + b*d_1*d_2*d_3*y + a*d_0*d_1*d_2 + b*d_0*d_1*d_2 + a*d_0*d_1*d_3 + b*d_0*d_2*d_3 + a*d_1*d_2*d_3 + b*d_1*d_2*d_3 + d_0*d_1*d_2 + d_0*d_1*d_3 + d_0*d_2*d_3 + d_1*d_2*d_3;
+
+i6 : E_1 = a^2*d_3*x^2 + 2*a*b*d_3*x*y + b^2*d_3*y^2 + a^2*d_1*x + 2*a*d_1*x + 2*a*d_3*x + 2*b*d_3*y + d_1*x + d_3;
+
+i7 : E_2 = a^2*d_3*x^2 + 2*a*b*d_3*x*y + b^2*d_3*y^2 + b^2*d_2*y + 2*a*d_3*x + 2*b*d_2*y + 2*b*d_3*y + d_2*y + d_3;
+
+i8 : E_3 = a^4*b^2*d_1*d_2*d_3*x^2 + 2*a^3*b^3*d_1*d_2*d_3*x*y + a^2*b^4*d_1*d_2*d_3*y^2 + 2*a^4*b*d_1*d_2*d_3*x^2 + 2*a^3*b^2*d_1*d_2*d_3*x^2 + 4*a^3*b^2*d_1*d_2*d_3*x*y + 4*a^2*b^3*d_1*d_2*d_3*x*y + 2*a^2*b^3*d_1*d_2*d_3*y^2 + 2*a*b^4*d_1*d_2*d_3*y^2 + 2*a^3*b^2*d_1*d_2*d_3*x + a^4*d_0*d_1*d_3*x^2 + a^2*b^2*d_0*d_2*d_3*x^2 + a^4*d_1*d_2*d_3*x^2 + 4*a^3*b*d_1*d_2*d_3*x^2 + a^2*b^2*d_1*d_2*d_3*x^2 + 2*a^2*b^3*d_1*d_2*d_3*y + 2*a^3*b*d_0*d_1*d_3*x*y + 2*a*b^3*d_0*d_2*d_3*x*y + 2*a^3*b*d_1*d_2*d_3*x*y + 8*a^2*b^2*d_1*d_2*d_3*x*y + 2*a*b^3*d_1*d_2*d_3*x*y + a^2*b^2*d_0*d_1*d_3*y^2 + b^4*d_0*d_2*d_3*y^2 + a^2*b^2*d_1*d_2*d_3*y^2 + 4*a*b^3*d_1*d_2*d_3*y^2 + b^4*d_1*d_2*d_3*y^2 + 4*a^3*b*d_1*d_2*d_3*x + 4*a^2*b^2*d_1*d_2*d_3*x + 2*a^3*d_0*d_1*d_3*x^2 + 2*a^2*b*d_0*d_2*d_3*x^2 + 2*a^3*d_1*d_2*d_3*x^2 + 2*a^2*b*d_1*d_2*d_3*x^2 + 4*a^2*b^2*d_1*d_2*d_3*y + 4*a*b^3*d_1*d_2*d_3*y + 4*a^2*b*d_0*d_1*d_3*x*y + 4*a*b^2*d_0*d_2*d_3*x*y + 4*a^2*b*d_1*d_2*d_3*x*y + 4*a*b^2*d_1*d_2*d_3*x*y + 2*a*b^2*d_0*d_1*d_3*y^2 + 2*b^3*d_0*d_2*d_3*y^2 + 2*a*b^2*d_1*d_2*d_3*y^2 + 2*b^3*d_1*d_2*d_3*y^2 + a^2*b^2*d_0*d_1*d_2 + a^2*b^2*d_1*d_2*d_3 + 2*a^3*d_0*d_1*d_3*x + 2*a*b^2*d_0*d_2*d_3*x + 2*a^3*d_1*d_2*d_3*x + 8*a^2*b*d_1*d_2*d_3*x + 2*a*b^2*d_1*d_2*d_3*x + a^2*d_0*d_1*d_3*x^2 + a^2*d_0*d_2*d_3*x^2 + a^2*d_1*d_2*d_3*x^2 + 2*a^2*b*d_0*d_1*d_3*y + 2*b^3*d_0*d_2*d_3*y + 2*a^2*b*d_1*d_2*d_3*y + 8*a*b^2*d_1*d_2*d_3*y + 2*b^3*d_1*d_2*d_3*y + 2*a*b*d_0*d_1*d_3*x*y + 2*a*b*d_0*d_2*d_3*x*y + 2*a*b*d_1*d_2*d_3*x*y + b^2*d_0*d_1*d_3*y^2 + b^2*d_0*d_2*d_3*y^2 + b^2*d_1*d_2*d_3*y^2 + 2*a^2*b*d_0*d_1*d_2 + 2*a*b^2*d_0*d_1*d_2 + 2*a^2*b*d_1*d_2*d_3 + 2*a*b^2*d_1*d_2*d_3 + 4*a^2*d_0*d_1*d_3*x + 4*a*b*d_0*d_2*d_3*x + 4*a^2*d_1*d_2*d_3*x + 4*a*b*d_1*d_2*d_3*x + 4*a*b*d_0*d_1*d_3*y + 4*b^2*d_0*d_2*d_3*y + 4*a*b*d_1*d_2*d_3*y + 4*b^2*d_1*d_2*d_3*y + a^2*d_0*d_1*d_2 + 4*a*b*d_0*d_1*d_2 + b^2*d_0*d_1*d_2 + a^2*d_0*d_1*d_3 + b^2*d_0*d_2*d_3 + a^2*d_1*d_2*d_3 + 4*a*b*d_1*d_2*d_3 + b^2*d_1*d_2*d_3 + 2*a*d_0*d_1*d_3*x + 2*a*d_0*d_2*d_3*x + 2*a*d_1*d_2*d_3*x + 2*b*d_0*d_1*d_3*y + 2*b*d_0*d_2*d_3*y + 2*b*d_1*d_2*d_3*y + 2*a*d_0*d_1*d_2 + 2*b*d_0*d_1*d_2 + 2*a*d_0*d_1*d_3 + 2*b*d_0*d_2*d_3 + 2*a*d_1*d_2*d_3 + 2*b*d_1*d_2*d_3 + d_0*d_1*d_2 + d_0*d_1*d_3 + d_0*d_2*d_3 + d_1*d_2*d_3;
+
+i9 : E_4 = a^2*b*d_1*d_2*d_3*t_0*x + a*b^2*d_1*d_2*d_3*t_0*y + a^2*d_1*d_2*d_3*t_0*x + a*b*d_1*d_2*d_3*t_0*x + a*b*d_0*d_2*d_3*t_1*x + a^2*d_0*d_1*d_3*t_2*x + a*b*d_1*d_2*d_3*t_0*y + b^2*d_1*d_2*d_3*t_0*y + b^2*d_0*d_2*d_3*t_1*y + a*b*d_0*d_1*d_3*t_2*y + a*b*d_1*d_2*d_3*t_0 + a*b*d_0*d_1*d_2*t_3 + a*d_1*d_2*d_3*t_0*x + a*d_0*d_2*d_3*t_1*x + a*d_0*d_1*d_3*t_2*x + b*d_1*d_2*d_3*t_0*y + b*d_0*d_2*d_3*t_1*y + b*d_0*d_1*d_3*t_2*y + a*d_1*d_2*d_3*t_0 + b*d_1*d_2*d_3*t_0 + b*d_0*d_2*d_3*t_1 + a*d_0*d_1*d_3*t_2 + a*d_0*d_1*d_2*t_3 + b*d_0*d_1*d_2*t_3 + d_1*d_2*d_3*t_0 + d_0*d_2*d_3*t_1 + d_0*d_1*d_3*t_2 + d_0*d_1*d_2*t_3;
+
+i10 : 
+      -- Non-degeneracy assumptions: d_k, a+1, b_1, x+y-1 are never zero
+      gc_0 = d_0*z_0-1;
+
+i11 : gc_1 = d_1*z_1-1;
+
+i12 : gc_2 = d_2*z_2-1;
+
+i13 : gc_3 = d_3*z_3-1;
+
+i14 : gc_4 = (a+1)*r-1;
+
+i15 : gc_5 = (b+1)*s-1;
+
+i16 : gc_6 = (x+y-1)*h-1;
+
+i17 : GC = {gc_0,gc_1,gc_2,gc_3,gc_4,gc_5,gc_6};
+
+i18 : 
+      -- Input from previous session
+      q = b^2*t_1^2*d_0*d_2^2-2*b^2*t_1*t_3*d_0*d_2^2+b^2*t_3^2*d_0*d_2^2+b^2*t_0^2*d_1*d_2^2-2*b^2*t_0*t_3*d_1*d_2^2+b^2*t_3^2*d_1*d_2^2+b^2*t_0^2*d_2^2*d_3-2*b^2*t_0*t_1*d_2^2*d_3+b^2*t_1^2*d_2^2*d_3+2*b*t_0*t_2*d_0*d_1*d_2-2*b*t_0*t_3*d_0*d_1*d_2-2*b*t_2*t_3*d_0*d_1*d_2+2*b*t_3^2*d_0*d_1*d_2+2*b*t_1^2*d_0*d_2^2-4*b*t_1*t_3*d_0*d_2^2+2*b*t_3^2*d_0*d_2^2+2*b*t_0^2*d_1*d_2^2-4*b*t_0*t_3*d_1*d_2^2+2*b*t_3^2*d_1*d_2^2-2*b*t_0*t_1*d_0*d_2*d_3+2*b*t_1^2*d_0*d_2*d_3+2*b*t_0*t_2*d_0*d_2*d_3-2*b*t_1*t_2*d_0*d_2*d_3+2*b*t_0^2*d_2^2*d_3-4*b*t_0*t_1*d_2^2*d_3+2*b*t_1^2*d_2^2*d_3+t_2^2*d_0^2*d_1-2*t_2*t_3*d_0^2*d_1+t_3^2*d_0^2*d_1+t_1^2*d_0^2*d_2-2*t_1*t_3*d_0^2*d_2+t_3^2*d_0^2*d_2+2*t_0*t_2*d_0*d_1*d_2-2*t_0*t_3*d_0*d_1*d_2-2*t_2*t_3*d_0*d_1*d_2+2*t_3^2*d_0*d_1*d_2+t_1^2*d_0*d_2^2-2*t_1*t_3*d_0*d_2^2+t_3^2*d_0*d_2^2+t_0^2*d_1*d_2^2-2*t_0*t_3*d_1*d_2^2+t_3^2*d_1*d_2^2+t_1^2*d_0^2*d_3-2*t_1*t_2*d_0^2*d_3+t_2^2*d_0^2*d_3-2*t_0*t_1*d_0*d_2*d_3+2*t_1^2*d_0*d_2*d_3+2*t_0*t_2*d_0*d_2*d_3-2*t_1*t_2*d_0*d_2*d_3+t_0^2*d_2^2*d_3-2*t_0*t_1*d_2^2*d_3+t_1^2*d_2^2*d_3;
+
+i19 : 
+      -- J is the idea of relations plus genericity conditions
+      J = ideal(E_0,E_1,E_2,E_3,E_4) + ideal(GC);
+
+o19 : Ideal of R
+
+i20 : 
+      -- I is the idea of relations plus the newly found q
+      I = J + ideal(q); 
+
+o20 : Ideal of R
+
+i21 : 
+      time GB = gens gb(I, DegreeLimit => 17);  --deg 17 is enough to get the linear equation
+
+   -- [gb]{2}(7){5}(2){6}(6){7}(24){8}(40){9}(97){10}(207){11}(458){12}(1132)
+   -- {13}(2243){14}(3133){15}(3492){16}(3710){17}(3925)number of (nonminimal) gb elements = 4985
+   -- number of monomials                = 546655
+   --      -- used 102.792 seconds
+
+              1       696
+o21 : Matrix R  <--- R
+
+i22 : l = GB_(0,1);
+
+i23 : toString factor l
+
+o23 = (a*t_1*t_2^2*d_0*d_1-2*a*t_1*t_2*t_3*d_0*d_1-a*t_2^2*t_3*d_0*d_1+a*t_1*t_3^2*d_0*d_1+2*a*t_2*t_3^2*d_0*d_1-a*t_3^3*d_0*d_1+b*t_1^2*t_2*d_0*d_2-b*t_1^2*t_3*d_0*d_2-2*b*t_1*t_2*t_3*d_0*d_2+2*b*t_1*t_3^2*d_0*d_2+b*t_2*t_3^2*d_0*d_2-b*t_3^3*d_0*d_2+a*t_0^2*t_1*d_1*d_2+b*t_0^2*t_2*d_1*d_2-a*t_0^2*t_3*d_1*d_2-b*t_0^2*t_3*d_1*d_2-2*a*t_0*t_1*t_3*d_1*d_2-2*b*t_0*t_2*t_3*d_1*d_2+2*a*t_0*t_3^2*d_1*d_2+2*b*t_0*t_3^2*d_1*d_2+a*t_1*t_3^2*d_1*d_2+b*t_2*t_3^2*d_1*d_2-a*t_3^3*d_1*d_2-b*t_3^3*d_1*d_2+a*t_0^2*t_1*d_1*d_3-2*a*t_0*t_1*t_2*d_1*d_3+a*t_1*t_2^2*d_1*d_3-a*t_0^2*t_3*d_1*d_3+2*a*t_0*t_2*t_3*d_1*d_3-a*t_2^2*t_3*d_1*d_3+b*t_0^2*t_2*d_2*d_3-2*b*t_0*t_1*t_2*d_2*d_3+b*t_1^2*t_2*d_2*d_3-b*t_0^2*t_3*d_2*d_3+2*b*t_0*t_1*t_3*d_2*d_3-b*t_1^2*t_3*d_2*d_3+t_0*t_2^2*d_0*d_1+t_1*t_2^2*d_0*d_1-2*t_0*t_2*t_3*d_0*d_1-2*t_1*t_2*t_3*d_0*d_1-2*t_2^2*t_3*d_0*d_1+t_0*t_3^2*d_0*d_1+t_1*t_3^2*d_0*d_1+4*t_2*t_3^2*d_0*d_1-2*t_3^3*d_0*d_1+t_0*t_1^2*d_0*d_2+t_1^2*t_2*d_0*d_2-2*t_0*t_1*t_3*d_0*d_2-2*t_1^2*t_3*d_0*d_2-2*t_1*t_2*t_3*d_0*d_2+t_0*t_3^2*d_0*d_2+4*t_1*t_3^2*d_0*d_2+t_2*t_3^2*d_0*d_2-2*t_3^3*d_0*d_2+t_0^2*t_1*d_1*d_2+t_0^2*t_2*d_1*d_2-2*t_0^2*t_3*d_1*d_2-2*t_0*t_1*t_3*d_1*d_2-2*t_0*t_2*t_3*d_1*d_2+4*t_0*t_3^2*d_1*d_2+t_1*t_3^2*d_1*d_2+t_2*t_3^2*d_1*d_2-2*t_3^3*d_1*d_2+t_0*t_1^2*d_0*d_3-2*t_0*t_1*t_2*d_0*d_3+t_0*t_2^2*d_0*d_3-t_1^2*t_3*d_0*d_3+2*t_1*t_2*t_3*d_0*d_3-t_2^2*t_3*d_0*d_3+t_0^2*t_1*d_1*d_3-2*t_0*t_1*t_2*d_1*d_3+t_1*t_2^2*d_1*d_3-t_0^2*t_3*d_1*d_3+2*t_0*t_2*t_3*d_1*d_3-t_2^2*t_3*d_1*d_3+t_0^2*t_2*d_2*d_3-2*t_0*t_1*t_2*d_2*d_3+t_1^2*t_2*d_2*d_3-t_0^2*t_3*d_2*d_3+2*t_0*t_1*t_3*d_2*d_3-t_1^2*t_3*d_2*d_3)
+
+i24 : --output appended at the end of this file
+      
+      restart
+Macaulay2, version 1.9.2
+with packages: ConwayPolynomials, Elimination, IntegralClosure, LLLBases, PrimaryDecomposition,
+               ReesAlgebra, TangentCone
+
+i1 : -- Part3:
+     -- Get a linear equation on x,y
+     -------------------------------
+     
+     printWidth = 0
+
+o1 = 0
+
+i2 : gbTrace = 2
+
+o2 = 2
+
+i3 : 
+     kk = QQ
+
+o3 = QQ
+
+o3 : Ring
+
+i4 : R = kk[z_0..z_3,r,s,h, x,y,a,b, t_0..t_3,d_0..d_3, MonomialOrder => Eliminate 7]
+
+o4 = R
+
+o4 : PolynomialRing
+
+i5 : 
+     -- Equationes derived from Jacobi formula using g = l, x, y, 1, tr DH
+     E_0 = a^2*b*d_1*d_2*d_3*x + a*b^2*d_1*d_2*d_3*y + a^2*d_0*d_1*d_3*x + a*b*d_0*d_2*d_3*x + a^2*d_1*d_2*d_3*x + a*b*d_1*d_2*d_3*x + a*b*d_0*d_1*d_3*y + b^2*d_0*d_2*d_3*y + a*b*d_1*d_2*d_3*y + b^2*d_1*d_2*d_3*y + a*b*d_0*d_1*d_2 + a*b*d_1*d_2*d_3 + a*d_0*d_1*d_3*x + a*d_0*d_2*d_3*x + a*d_1*d_2*d_3*x + b*d_0*d_1*d_3*y + b*d_0*d_2*d_3*y + b*d_1*d_2*d_3*y + a*d_0*d_1*d_2 + b*d_0*d_1*d_2 + a*d_0*d_1*d_3 + b*d_0*d_2*d_3 + a*d_1*d_2*d_3 + b*d_1*d_2*d_3 + d_0*d_1*d_2 + d_0*d_1*d_3 + d_0*d_2*d_3 + d_1*d_2*d_3;
+
+i6 : E_1 = a^2*d_3*x^2 + 2*a*b*d_3*x*y + b^2*d_3*y^2 + a^2*d_1*x + 2*a*d_1*x + 2*a*d_3*x + 2*b*d_3*y + d_1*x + d_3;
+
+i7 : E_2 = a^2*d_3*x^2 + 2*a*b*d_3*x*y + b^2*d_3*y^2 + b^2*d_2*y + 2*a*d_3*x + 2*b*d_2*y + 2*b*d_3*y + d_2*y + d_3;
+
+i8 : E_3 = a^4*b^2*d_1*d_2*d_3*x^2 + 2*a^3*b^3*d_1*d_2*d_3*x*y + a^2*b^4*d_1*d_2*d_3*y^2 + 2*a^4*b*d_1*d_2*d_3*x^2 + 2*a^3*b^2*d_1*d_2*d_3*x^2 + 4*a^3*b^2*d_1*d_2*d_3*x*y + 4*a^2*b^3*d_1*d_2*d_3*x*y + 2*a^2*b^3*d_1*d_2*d_3*y^2 + 2*a*b^4*d_1*d_2*d_3*y^2 + 2*a^3*b^2*d_1*d_2*d_3*x + a^4*d_0*d_1*d_3*x^2 + a^2*b^2*d_0*d_2*d_3*x^2 + a^4*d_1*d_2*d_3*x^2 + 4*a^3*b*d_1*d_2*d_3*x^2 + a^2*b^2*d_1*d_2*d_3*x^2 + 2*a^2*b^3*d_1*d_2*d_3*y + 2*a^3*b*d_0*d_1*d_3*x*y + 2*a*b^3*d_0*d_2*d_3*x*y + 2*a^3*b*d_1*d_2*d_3*x*y + 8*a^2*b^2*d_1*d_2*d_3*x*y + 2*a*b^3*d_1*d_2*d_3*x*y + a^2*b^2*d_0*d_1*d_3*y^2 + b^4*d_0*d_2*d_3*y^2 + a^2*b^2*d_1*d_2*d_3*y^2 + 4*a*b^3*d_1*d_2*d_3*y^2 + b^4*d_1*d_2*d_3*y^2 + 4*a^3*b*d_1*d_2*d_3*x + 4*a^2*b^2*d_1*d_2*d_3*x + 2*a^3*d_0*d_1*d_3*x^2 + 2*a^2*b*d_0*d_2*d_3*x^2 + 2*a^3*d_1*d_2*d_3*x^2 + 2*a^2*b*d_1*d_2*d_3*x^2 + 4*a^2*b^2*d_1*d_2*d_3*y + 4*a*b^3*d_1*d_2*d_3*y + 4*a^2*b*d_0*d_1*d_3*x*y + 4*a*b^2*d_0*d_2*d_3*x*y + 4*a^2*b*d_1*d_2*d_3*x*y + 4*a*b^2*d_1*d_2*d_3*x*y + 2*a*b^2*d_0*d_1*d_3*y^2 + 2*b^3*d_0*d_2*d_3*y^2 + 2*a*b^2*d_1*d_2*d_3*y^2 + 2*b^3*d_1*d_2*d_3*y^2 + a^2*b^2*d_0*d_1*d_2 + a^2*b^2*d_1*d_2*d_3 + 2*a^3*d_0*d_1*d_3*x + 2*a*b^2*d_0*d_2*d_3*x + 2*a^3*d_1*d_2*d_3*x + 8*a^2*b*d_1*d_2*d_3*x + 2*a*b^2*d_1*d_2*d_3*x + a^2*d_0*d_1*d_3*x^2 + a^2*d_0*d_2*d_3*x^2 + a^2*d_1*d_2*d_3*x^2 + 2*a^2*b*d_0*d_1*d_3*y + 2*b^3*d_0*d_2*d_3*y + 2*a^2*b*d_1*d_2*d_3*y + 8*a*b^2*d_1*d_2*d_3*y + 2*b^3*d_1*d_2*d_3*y + 2*a*b*d_0*d_1*d_3*x*y + 2*a*b*d_0*d_2*d_3*x*y + 2*a*b*d_1*d_2*d_3*x*y + b^2*d_0*d_1*d_3*y^2 + b^2*d_0*d_2*d_3*y^2 + b^2*d_1*d_2*d_3*y^2 + 2*a^2*b*d_0*d_1*d_2 + 2*a*b^2*d_0*d_1*d_2 + 2*a^2*b*d_1*d_2*d_3 + 2*a*b^2*d_1*d_2*d_3 + 4*a^2*d_0*d_1*d_3*x + 4*a*b*d_0*d_2*d_3*x + 4*a^2*d_1*d_2*d_3*x + 4*a*b*d_1*d_2*d_3*x + 4*a*b*d_0*d_1*d_3*y + 4*b^2*d_0*d_2*d_3*y + 4*a*b*d_1*d_2*d_3*y + 4*b^2*d_1*d_2*d_3*y + a^2*d_0*d_1*d_2 + 4*a*b*d_0*d_1*d_2 + b^2*d_0*d_1*d_2 + a^2*d_0*d_1*d_3 + b^2*d_0*d_2*d_3 + a^2*d_1*d_2*d_3 + 4*a*b*d_1*d_2*d_3 + b^2*d_1*d_2*d_3 + 2*a*d_0*d_1*d_3*x + 2*a*d_0*d_2*d_3*x + 2*a*d_1*d_2*d_3*x + 2*b*d_0*d_1*d_3*y + 2*b*d_0*d_2*d_3*y + 2*b*d_1*d_2*d_3*y + 2*a*d_0*d_1*d_2 + 2*b*d_0*d_1*d_2 + 2*a*d_0*d_1*d_3 + 2*b*d_0*d_2*d_3 + 2*a*d_1*d_2*d_3 + 2*b*d_1*d_2*d_3 + d_0*d_1*d_2 + d_0*d_1*d_3 + d_0*d_2*d_3 + d_1*d_2*d_3;
+
+i9 : E_4 = a^2*b*d_1*d_2*d_3*t_0*x + a*b^2*d_1*d_2*d_3*t_0*y + a^2*d_1*d_2*d_3*t_0*x + a*b*d_1*d_2*d_3*t_0*x + a*b*d_0*d_2*d_3*t_1*x + a^2*d_0*d_1*d_3*t_2*x + a*b*d_1*d_2*d_3*t_0*y + b^2*d_1*d_2*d_3*t_0*y + b^2*d_0*d_2*d_3*t_1*y + a*b*d_0*d_1*d_3*t_2*y + a*b*d_1*d_2*d_3*t_0 + a*b*d_0*d_1*d_2*t_3 + a*d_1*d_2*d_3*t_0*x + a*d_0*d_2*d_3*t_1*x + a*d_0*d_1*d_3*t_2*x + b*d_1*d_2*d_3*t_0*y + b*d_0*d_2*d_3*t_1*y + b*d_0*d_1*d_3*t_2*y + a*d_1*d_2*d_3*t_0 + b*d_1*d_2*d_3*t_0 + b*d_0*d_2*d_3*t_1 + a*d_0*d_1*d_3*t_2 + a*d_0*d_1*d_2*t_3 + b*d_0*d_1*d_2*t_3 + d_1*d_2*d_3*t_0 + d_0*d_2*d_3*t_1 + d_0*d_1*d_3*t_2 + d_0*d_1*d_2*t_3;
+
+i10 : 
+      -- Non-degeneracy assumptions: d_k, a+1, b_1, x+y-1 are never zero
+      gc_0 = d_0*z_0-1;
+
+i11 : gc_1 = d_1*z_1-1;
+
+i12 : gc_2 = d_2*z_2-1;
+
+i13 : gc_3 = d_3*z_3-1;
+
+i14 : gc_4 = (a+1)*r-1;
+
+i15 : gc_5 = (b+1)*s-1;
+
+i16 : gc_6 = (x+y-1)*h-1;
+
+i17 : GC = {gc_0,gc_1,gc_2,gc_3,gc_4,gc_5,gc_6};
+
+i18 : 
+      -- Input from previous sessions
+      q = b^2*t_1^2*d_0*d_2^2-2*b^2*t_1*t_3*d_0*d_2^2+b^2*t_3^2*d_0*d_2^2+b^2*t_0^2*d_1*d_2^2-2*b^2*t_0*t_3*d_1*d_2^2+b^2*t_3^2*d_1*d_2^2+b^2*t_0^2*d_2^2*d_3-2*b^2*t_0*t_1*d_2^2*d_3+b^2*t_1^2*d_2^2*d_3+2*b*t_0*t_2*d_0*d_1*d_2-2*b*t_0*t_3*d_0*d_1*d_2-2*b*t_2*t_3*d_0*d_1*d_2+2*b*t_3^2*d_0*d_1*d_2+2*b*t_1^2*d_0*d_2^2-4*b*t_1*t_3*d_0*d_2^2+2*b*t_3^2*d_0*d_2^2+2*b*t_0^2*d_1*d_2^2-4*b*t_0*t_3*d_1*d_2^2+2*b*t_3^2*d_1*d_2^2-2*b*t_0*t_1*d_0*d_2*d_3+2*b*t_1^2*d_0*d_2*d_3+2*b*t_0*t_2*d_0*d_2*d_3-2*b*t_1*t_2*d_0*d_2*d_3+2*b*t_0^2*d_2^2*d_3-4*b*t_0*t_1*d_2^2*d_3+2*b*t_1^2*d_2^2*d_3+t_2^2*d_0^2*d_1-2*t_2*t_3*d_0^2*d_1+t_3^2*d_0^2*d_1+t_1^2*d_0^2*d_2-2*t_1*t_3*d_0^2*d_2+t_3^2*d_0^2*d_2+2*t_0*t_2*d_0*d_1*d_2-2*t_0*t_3*d_0*d_1*d_2-2*t_2*t_3*d_0*d_1*d_2+2*t_3^2*d_0*d_1*d_2+t_1^2*d_0*d_2^2-2*t_1*t_3*d_0*d_2^2+t_3^2*d_0*d_2^2+t_0^2*d_1*d_2^2-2*t_0*t_3*d_1*d_2^2+t_3^2*d_1*d_2^2+t_1^2*d_0^2*d_3-2*t_1*t_2*d_0^2*d_3+t_2^2*d_0^2*d_3-2*t_0*t_1*d_0*d_2*d_3+2*t_1^2*d_0*d_2*d_3+2*t_0*t_2*d_0*d_2*d_3-2*t_1*t_2*d_0*d_2*d_3+t_0^2*d_2^2*d_3-2*t_0*t_1*d_2^2*d_3+t_1^2*d_2^2*d_3;
+
+i19 : l = a*t_1*t_2^2*d_0*d_1-2*a*t_1*t_2*t_3*d_0*d_1-a*t_2^2*t_3*d_0*d_1+a*t_1*t_3^2*d_0*d_1+2*a*t_2*t_3^2*d_0*d_1-a*t_3^3*d_0*d_1+b*t_1^2*t_2*d_0*d_2-b*t_1^2*t_3*d_0*d_2-2*b*t_1*t_2*t_3*d_0*d_2+2*b*t_1*t_3^2*d_0*d_2+b*t_2*t_3^2*d_0*d_2-b*t_3^3*d_0*d_2+a*t_0^2*t_1*d_1*d_2+b*t_0^2*t_2*d_1*d_2-a*t_0^2*t_3*d_1*d_2-b*t_0^2*t_3*d_1*d_2-2*a*t_0*t_1*t_3*d_1*d_2-2*b*t_0*t_2*t_3*d_1*d_2+2*a*t_0*t_3^2*d_1*d_2+2*b*t_0*t_3^2*d_1*d_2+a*t_1*t_3^2*d_1*d_2+b*t_2*t_3^2*d_1*d_2-a*t_3^3*d_1*d_2-b*t_3^3*d_1*d_2+a*t_0^2*t_1*d_1*d_3-2*a*t_0*t_1*t_2*d_1*d_3+a*t_1*t_2^2*d_1*d_3-a*t_0^2*t_3*d_1*d_3+2*a*t_0*t_2*t_3*d_1*d_3-a*t_2^2*t_3*d_1*d_3+b*t_0^2*t_2*d_2*d_3-2*b*t_0*t_1*t_2*d_2*d_3+b*t_1^2*t_2*d_2*d_3-b*t_0^2*t_3*d_2*d_3+2*b*t_0*t_1*t_3*d_2*d_3-b*t_1^2*t_3*d_2*d_3+t_0*t_2^2*d_0*d_1+t_1*t_2^2*d_0*d_1-2*t_0*t_2*t_3*d_0*d_1-2*t_1*t_2*t_3*d_0*d_1-2*t_2^2*t_3*d_0*d_1+t_0*t_3^2*d_0*d_1+t_1*t_3^2*d_0*d_1+4*t_2*t_3^2*d_0*d_1-2*t_3^3*d_0*d_1+t_0*t_1^2*d_0*d_2+t_1^2*t_2*d_0*d_2-2*t_0*t_1*t_3*d_0*d_2-2*t_1^2*t_3*d_0*d_2-2*t_1*t_2*t_3*d_0*d_2+t_0*t_3^2*d_0*d_2+4*t_1*t_3^2*d_0*d_2+t_2*t_3^2*d_0*d_2-2*t_3^3*d_0*d_2+t_0^2*t_1*d_1*d_2+t_0^2*t_2*d_1*d_2-2*t_0^2*t_3*d_1*d_2-2*t_0*t_1*t_3*d_1*d_2-2*t_0*t_2*t_3*d_1*d_2+4*t_0*t_3^2*d_1*d_2+t_1*t_3^2*d_1*d_2+t_2*t_3^2*d_1*d_2-2*t_3^3*d_1*d_2+t_0*t_1^2*d_0*d_3-2*t_0*t_1*t_2*d_0*d_3+t_0*t_2^2*d_0*d_3-t_1^2*t_3*d_0*d_3+2*t_1*t_2*t_3*d_0*d_3-t_2^2*t_3*d_0*d_3+t_0^2*t_1*d_1*d_3-2*t_0*t_1*t_2*d_1*d_3+t_1*t_2^2*d_1*d_3-t_0^2*t_3*d_1*d_3+2*t_0*t_2*t_3*d_1*d_3-t_2^2*t_3*d_1*d_3+t_0^2*t_2*d_2*d_3-2*t_0*t_1*t_2*d_2*d_3+t_1^2*t_2*d_2*d_3-t_0^2*t_3*d_2*d_3+2*t_0*t_1*t_3*d_2*d_3-t_1^2*t_3*d_2*d_3;
+
+i20 : 
+      -- J is the idea of relations plus genericity conditions
+      J = ideal(E_0,E_1,E_2,E_3,E_4) + ideal(GC);
+
+o20 : Ideal of R
+
+i21 : 
+      -- I is the idea of relations plus the newly found q and l
+      I = J + ideal(q,l); 
+
+o21 : Ideal of R
+
+i22 : 
+      time g = gb(I, DegreeLimit => 14);  --deg 14 enough to find the linear relation we want
+
+   -- [gb]{2}(7){5}(2){6}(7){7}(27){8}(59){9}(130){10}(290){11}(672){12}(1575)
+   -- {13}(2743){14}(3483)number of (nonminimal) gb elements = 2754
+   -- number of monomials                = 343438
+   --      -- used 9.92808 seconds
+
+i23 : GB = selectInSubring(1, gens g);
+              1       32
+o23 : Matrix R  <--- R
+
+i24 : L_0 = GB_(0,0);
+i25 : toString factor L_0
+o25 = (x*a*t_1+y*b*t_2-x*a*t_3-y*b*t_3-x*t_0-y*t_0+x*t_1+y*t_2+t_0-t_3)
+
+i26 : --output appended at the end of this file
+      
+      restart
+Macaulay2, version 1.9.2
+with packages: ConwayPolynomials, Elimination, IntegralClosure, LLLBases, PrimaryDecomposition,
+               ReesAlgebra, TangentCone
+
+i1 : -- Part4:
+     -- Get a linear equation on x only
+     ----------------------------------
+     printWidth = 0
+
+o1 = 0
+
+i2 : gbTrace = 2
+
+o2 = 2
+
+i3 : kk = QQ
+
+o3 = QQ
+
+o3 : Ring
+
+i4 : R = kk[z_0..z_3,r,s,h, y, x,a,b, t_0..t_3,d_0..d_3, MonomialOrder => Eliminate 8]
+
+o4 = R
+
+o4 : PolynomialRing
+
+i5 : -- Equationes derived from Jacobi formula using g = l, x, y, 1, tr DH
+     E_0 = a^2*b*d_1*d_2*d_3*x + a*b^2*d_1*d_2*d_3*y + a^2*d_0*d_1*d_3*x + a*b*d_0*d_2*d_3*x + a^2*d_1*d_2*d_3*x + a*b*d_1*d_2*d_3*x + a*b*d_0*d_1*d_3*y + b^2*d_0*d_2*d_3*y + a*b*d_1*d_2*d_3*y + b^2*d_1*d_2*d_3*y + a*b*d_0*d_1*d_2 + a*b*d_1*d_2*d_3 + a*d_0*d_1*d_3*x + a*d_0*d_2*d_3*x + a*d_1*d_2*d_3*x + b*d_0*d_1*d_3*y + b*d_0*d_2*d_3*y + b*d_1*d_2*d_3*y + a*d_0*d_1*d_2 + b*d_0*d_1*d_2 + a*d_0*d_1*d_3 + b*d_0*d_2*d_3 + a*d_1*d_2*d_3 + b*d_1*d_2*d_3 + d_0*d_1*d_2 + d_0*d_1*d_3 + d_0*d_2*d_3 + d_1*d_2*d_3;
+
+i6 : E_1 = a^2*d_3*x^2 + 2*a*b*d_3*x*y + b^2*d_3*y^2 + a^2*d_1*x + 2*a*d_1*x + 2*a*d_3*x + 2*b*d_3*y + d_1*x + d_3;
+
+i7 : E_2 = a^2*d_3*x^2 + 2*a*b*d_3*x*y + b^2*d_3*y^2 + b^2*d_2*y + 2*a*d_3*x + 2*b*d_2*y + 2*b*d_3*y + d_2*y + d_3;
+
+i8 : E_3 = a^4*b^2*d_1*d_2*d_3*x^2 + 2*a^3*b^3*d_1*d_2*d_3*x*y + a^2*b^4*d_1*d_2*d_3*y^2 + 2*a^4*b*d_1*d_2*d_3*x^2 + 2*a^3*b^2*d_1*d_2*d_3*x^2 + 4*a^3*b^2*d_1*d_2*d_3*x*y + 4*a^2*b^3*d_1*d_2*d_3*x*y + 2*a^2*b^3*d_1*d_2*d_3*y^2 + 2*a*b^4*d_1*d_2*d_3*y^2 + 2*a^3*b^2*d_1*d_2*d_3*x + a^4*d_0*d_1*d_3*x^2 + a^2*b^2*d_0*d_2*d_3*x^2 + a^4*d_1*d_2*d_3*x^2 + 4*a^3*b*d_1*d_2*d_3*x^2 + a^2*b^2*d_1*d_2*d_3*x^2 + 2*a^2*b^3*d_1*d_2*d_3*y + 2*a^3*b*d_0*d_1*d_3*x*y + 2*a*b^3*d_0*d_2*d_3*x*y + 2*a^3*b*d_1*d_2*d_3*x*y + 8*a^2*b^2*d_1*d_2*d_3*x*y + 2*a*b^3*d_1*d_2*d_3*x*y + a^2*b^2*d_0*d_1*d_3*y^2 + b^4*d_0*d_2*d_3*y^2 + a^2*b^2*d_1*d_2*d_3*y^2 + 4*a*b^3*d_1*d_2*d_3*y^2 + b^4*d_1*d_2*d_3*y^2 + 4*a^3*b*d_1*d_2*d_3*x + 4*a^2*b^2*d_1*d_2*d_3*x + 2*a^3*d_0*d_1*d_3*x^2 + 2*a^2*b*d_0*d_2*d_3*x^2 + 2*a^3*d_1*d_2*d_3*x^2 + 2*a^2*b*d_1*d_2*d_3*x^2 + 4*a^2*b^2*d_1*d_2*d_3*y + 4*a*b^3*d_1*d_2*d_3*y + 4*a^2*b*d_0*d_1*d_3*x*y + 4*a*b^2*d_0*d_2*d_3*x*y + 4*a^2*b*d_1*d_2*d_3*x*y + 4*a*b^2*d_1*d_2*d_3*x*y + 2*a*b^2*d_0*d_1*d_3*y^2 + 2*b^3*d_0*d_2*d_3*y^2 + 2*a*b^2*d_1*d_2*d_3*y^2 + 2*b^3*d_1*d_2*d_3*y^2 + a^2*b^2*d_0*d_1*d_2 + a^2*b^2*d_1*d_2*d_3 + 2*a^3*d_0*d_1*d_3*x + 2*a*b^2*d_0*d_2*d_3*x + 2*a^3*d_1*d_2*d_3*x + 8*a^2*b*d_1*d_2*d_3*x + 2*a*b^2*d_1*d_2*d_3*x + a^2*d_0*d_1*d_3*x^2 + a^2*d_0*d_2*d_3*x^2 + a^2*d_1*d_2*d_3*x^2 + 2*a^2*b*d_0*d_1*d_3*y + 2*b^3*d_0*d_2*d_3*y + 2*a^2*b*d_1*d_2*d_3*y + 8*a*b^2*d_1*d_2*d_3*y + 2*b^3*d_1*d_2*d_3*y + 2*a*b*d_0*d_1*d_3*x*y + 2*a*b*d_0*d_2*d_3*x*y + 2*a*b*d_1*d_2*d_3*x*y + b^2*d_0*d_1*d_3*y^2 + b^2*d_0*d_2*d_3*y^2 + b^2*d_1*d_2*d_3*y^2 + 2*a^2*b*d_0*d_1*d_2 + 2*a*b^2*d_0*d_1*d_2 + 2*a^2*b*d_1*d_2*d_3 + 2*a*b^2*d_1*d_2*d_3 + 4*a^2*d_0*d_1*d_3*x + 4*a*b*d_0*d_2*d_3*x + 4*a^2*d_1*d_2*d_3*x + 4*a*b*d_1*d_2*d_3*x + 4*a*b*d_0*d_1*d_3*y + 4*b^2*d_0*d_2*d_3*y + 4*a*b*d_1*d_2*d_3*y + 4*b^2*d_1*d_2*d_3*y + a^2*d_0*d_1*d_2 + 4*a*b*d_0*d_1*d_2 + b^2*d_0*d_1*d_2 + a^2*d_0*d_1*d_3 + b^2*d_0*d_2*d_3 + a^2*d_1*d_2*d_3 + 4*a*b*d_1*d_2*d_3 + b^2*d_1*d_2*d_3 + 2*a*d_0*d_1*d_3*x + 2*a*d_0*d_2*d_3*x + 2*a*d_1*d_2*d_3*x + 2*b*d_0*d_1*d_3*y + 2*b*d_0*d_2*d_3*y + 2*b*d_1*d_2*d_3*y + 2*a*d_0*d_1*d_2 + 2*b*d_0*d_1*d_2 + 2*a*d_0*d_1*d_3 + 2*b*d_0*d_2*d_3 + 2*a*d_1*d_2*d_3 + 2*b*d_1*d_2*d_3 + d_0*d_1*d_2 + d_0*d_1*d_3 + d_0*d_2*d_3 + d_1*d_2*d_3;
+
+i9 : E_4 = a^2*b*d_1*d_2*d_3*t_0*x + a*b^2*d_1*d_2*d_3*t_0*y + a^2*d_1*d_2*d_3*t_0*x + a*b*d_1*d_2*d_3*t_0*x + a*b*d_0*d_2*d_3*t_1*x + a^2*d_0*d_1*d_3*t_2*x + a*b*d_1*d_2*d_3*t_0*y + b^2*d_1*d_2*d_3*t_0*y + b^2*d_0*d_2*d_3*t_1*y + a*b*d_0*d_1*d_3*t_2*y + a*b*d_1*d_2*d_3*t_0 + a*b*d_0*d_1*d_2*t_3 + a*d_1*d_2*d_3*t_0*x + a*d_0*d_2*d_3*t_1*x + a*d_0*d_1*d_3*t_2*x + b*d_1*d_2*d_3*t_0*y + b*d_0*d_2*d_3*t_1*y + b*d_0*d_1*d_3*t_2*y + a*d_1*d_2*d_3*t_0 + b*d_1*d_2*d_3*t_0 + b*d_0*d_2*d_3*t_1 + a*d_0*d_1*d_3*t_2 + a*d_0*d_1*d_2*t_3 + b*d_0*d_1*d_2*t_3 + d_1*d_2*d_3*t_0 + d_0*d_2*d_3*t_1 + d_0*d_1*d_3*t_2 + d_0*d_1*d_2*t_3;
+
+i10 : 
+      -- Non-degeneracy assumptions: d_k, a+1, b_1, x+y-1 are never zero
+      gc_0 = d_0*z_0-1;
+
+i11 : gc_1 = d_1*z_1-1;
+
+i12 : gc_2 = d_2*z_2-1;
+
+i13 : gc_3 = d_3*z_3-1;
+
+i14 : gc_4 = (a+1)*r-1;
+
+i15 : gc_5 = (b+1)*s-1;
+
+i16 : gc_6 = (x+y-1)*h-1;
+
+i17 : GC = {gc_0,gc_1,gc_2,gc_3,gc_4,gc_5,gc_6};
+
+i18 : 
+      -- Input from previous sessions
+      q = b^2*t_1^2*d_0*d_2^2-2*b^2*t_1*t_3*d_0*d_2^2+b^2*t_3^2*d_0*d_2^2+b^2*t_0^2*d_1*d_2^2-2*b^2*t_0*t_3*d_1*d_2^2+b^2*t_3^2*d_1*d_2^2+b^2*t_0^2*d_2^2*d_3-2*b^2*t_0*t_1*d_2^2*d_3+b^2*t_1^2*d_2^2*d_3+2*b*t_0*t_2*d_0*d_1*d_2-2*b*t_0*t_3*d_0*d_1*d_2-2*b*t_2*t_3*d_0*d_1*d_2+2*b*t_3^2*d_0*d_1*d_2+2*b*t_1^2*d_0*d_2^2-4*b*t_1*t_3*d_0*d_2^2+2*b*t_3^2*d_0*d_2^2+2*b*t_0^2*d_1*d_2^2-4*b*t_0*t_3*d_1*d_2^2+2*b*t_3^2*d_1*d_2^2-2*b*t_0*t_1*d_0*d_2*d_3+2*b*t_1^2*d_0*d_2*d_3+2*b*t_0*t_2*d_0*d_2*d_3-2*b*t_1*t_2*d_0*d_2*d_3+2*b*t_0^2*d_2^2*d_3-4*b*t_0*t_1*d_2^2*d_3+2*b*t_1^2*d_2^2*d_3+t_2^2*d_0^2*d_1-2*t_2*t_3*d_0^2*d_1+t_3^2*d_0^2*d_1+t_1^2*d_0^2*d_2-2*t_1*t_3*d_0^2*d_2+t_3^2*d_0^2*d_2+2*t_0*t_2*d_0*d_1*d_2-2*t_0*t_3*d_0*d_1*d_2-2*t_2*t_3*d_0*d_1*d_2+2*t_3^2*d_0*d_1*d_2+t_1^2*d_0*d_2^2-2*t_1*t_3*d_0*d_2^2+t_3^2*d_0*d_2^2+t_0^2*d_1*d_2^2-2*t_0*t_3*d_1*d_2^2+t_3^2*d_1*d_2^2+t_1^2*d_0^2*d_3-2*t_1*t_2*d_0^2*d_3+t_2^2*d_0^2*d_3-2*t_0*t_1*d_0*d_2*d_3+2*t_1^2*d_0*d_2*d_3+2*t_0*t_2*d_0*d_2*d_3-2*t_1*t_2*d_0*d_2*d_3+t_0^2*d_2^2*d_3-2*t_0*t_1*d_2^2*d_3+t_1^2*d_2^2*d_3;
+
+i19 : l = a*t_1*t_2^2*d_0*d_1-2*a*t_1*t_2*t_3*d_0*d_1-a*t_2^2*t_3*d_0*d_1+a*t_1*t_3^2*d_0*d_1+2*a*t_2*t_3^2*d_0*d_1-a*t_3^3*d_0*d_1+b*t_1^2*t_2*d_0*d_2-b*t_1^2*t_3*d_0*d_2-2*b*t_1*t_2*t_3*d_0*d_2+2*b*t_1*t_3^2*d_0*d_2+b*t_2*t_3^2*d_0*d_2-b*t_3^3*d_0*d_2+a*t_0^2*t_1*d_1*d_2+b*t_0^2*t_2*d_1*d_2-a*t_0^2*t_3*d_1*d_2-b*t_0^2*t_3*d_1*d_2-2*a*t_0*t_1*t_3*d_1*d_2-2*b*t_0*t_2*t_3*d_1*d_2+2*a*t_0*t_3^2*d_1*d_2+2*b*t_0*t_3^2*d_1*d_2+a*t_1*t_3^2*d_1*d_2+b*t_2*t_3^2*d_1*d_2-a*t_3^3*d_1*d_2-b*t_3^3*d_1*d_2+a*t_0^2*t_1*d_1*d_3-2*a*t_0*t_1*t_2*d_1*d_3+a*t_1*t_2^2*d_1*d_3-a*t_0^2*t_3*d_1*d_3+2*a*t_0*t_2*t_3*d_1*d_3-a*t_2^2*t_3*d_1*d_3+b*t_0^2*t_2*d_2*d_3-2*b*t_0*t_1*t_2*d_2*d_3+b*t_1^2*t_2*d_2*d_3-b*t_0^2*t_3*d_2*d_3+2*b*t_0*t_1*t_3*d_2*d_3-b*t_1^2*t_3*d_2*d_3+t_0*t_2^2*d_0*d_1+t_1*t_2^2*d_0*d_1-2*t_0*t_2*t_3*d_0*d_1-2*t_1*t_2*t_3*d_0*d_1-2*t_2^2*t_3*d_0*d_1+t_0*t_3^2*d_0*d_1+t_1*t_3^2*d_0*d_1+4*t_2*t_3^2*d_0*d_1-2*t_3^3*d_0*d_1+t_0*t_1^2*d_0*d_2+t_1^2*t_2*d_0*d_2-2*t_0*t_1*t_3*d_0*d_2-2*t_1^2*t_3*d_0*d_2-2*t_1*t_2*t_3*d_0*d_2+t_0*t_3^2*d_0*d_2+4*t_1*t_3^2*d_0*d_2+t_2*t_3^2*d_0*d_2-2*t_3^3*d_0*d_2+t_0^2*t_1*d_1*d_2+t_0^2*t_2*d_1*d_2-2*t_0^2*t_3*d_1*d_2-2*t_0*t_1*t_3*d_1*d_2-2*t_0*t_2*t_3*d_1*d_2+4*t_0*t_3^2*d_1*d_2+t_1*t_3^2*d_1*d_2+t_2*t_3^2*d_1*d_2-2*t_3^3*d_1*d_2+t_0*t_1^2*d_0*d_3-2*t_0*t_1*t_2*d_0*d_3+t_0*t_2^2*d_0*d_3-t_1^2*t_3*d_0*d_3+2*t_1*t_2*t_3*d_0*d_3-t_2^2*t_3*d_0*d_3+t_0^2*t_1*d_1*d_3-2*t_0*t_1*t_2*d_1*d_3+t_1*t_2^2*d_1*d_3-t_0^2*t_3*d_1*d_3+2*t_0*t_2*t_3*d_1*d_3-t_2^2*t_3*d_1*d_3+t_0^2*t_2*d_2*d_3-2*t_0*t_1*t_2*d_2*d_3+t_1^2*t_2*d_2*d_3-t_0^2*t_3*d_2*d_3+2*t_0*t_1*t_3*d_2*d_3-t_1^2*t_3*d_2*d_3;
+
+i20 : L_0 = x*a*t_1+y*b*t_2-x*a*t_3-y*b*t_3-x*t_0-y*t_0+x*t_1+y*t_2+t_0-t_3;
+
+i21 : 
+      -- J is the idea of relations plus genericity conditions
+      J = ideal(E_0,E_1,E_2,E_3,E_4) + ideal(GC);
+
+o21 : Ideal of R
+
+i22 : 
+      -- I is the idea of relations plus the newly found q, l, L_0
+      I = J + ideal(q,l,L_0); 
+
+o22 : Ideal of R
+
+i23 : 
+      time g = gb(I, DegreeLimit => 13); 
+
+   -- [gb]{2}(7){3}(1){4}(2){5}(6){6}(12){7}(44){8}(127){9}(276){10}(570){11}(1337)
+   -- {12}(2780){13}(4559)number of (nonminimal) gb elements = 3257
+   -- number of monomials                = 666340
+   --      -- used 29.0577 seconds
+
+i24 : GB = selectInSubring(1, gens g);
+
+
+              1       26
+o24 : Matrix R  <--- R
+
+i25 :       L_1 = GB_(0,1);
+
+i26 : toString factor L_1
+
+o26 = (x*a*b^2*t_1*d_2-x*a*b^2*t_3*d_2-x*b^2*t_0*d_2+2*x*a*b*t_1*d_2+x*b^2*t_1*d_2-2*x*a*b*t_3*d_2+x*a*t_1*d_0-x*b*t_2*d_0-x*a*t_3*d_0+x*b*t_3*d_0-2*x*b*t_0*d_2+b^2*t_0*d_2+x*a*t_1*d_2+2*x*b*t_1*d_2-x*a*t_3*d_2-b^2*t_3*d_2+x*t_1*d_0-x*t_2*d_0+b*t_2*d_0-b*t_3*d_0-x*t_0*d_2+2*b*t_0*d_2+x*t_1*d_2-2*b*t_3*d_2+t_2*d_0-t_3*d_0+t_0*d_2-t_3*d_2)
+
+i27 : --output appended at the end of this file
+      
+      exit
+
+Process M2 finished
