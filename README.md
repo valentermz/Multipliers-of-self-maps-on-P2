@@ -16,7 +16,7 @@ This repository contains the following files:
     |-- Jacobi-system/
     |   |-- analysis-jacobi-ideal.m2
     |   |-- README.md
-    |-- Test/
+    |-- Tests/
     |   |-- compute-h.m2
     |   |-- test-realizability.m2
     |   |-- README.md
