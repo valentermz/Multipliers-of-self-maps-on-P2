@@ -1,11 +1,11 @@
 -- Code for TEST : decide if a collection (u_0,v_0,...,u_6,v_6) is realizable or not
 ------------------------------------------------------------------------------------
 
-gbTrace = 3;
+gbTrace = 2;
 printWidth = 0;
 
 kk = QQ;
-R = kk[w_0..w_3, x,y, c_0..c_5, a,b, MonomialOrder => {4, 2, 6, 2}];
+R = kk[w_0..w_3, x,y, c_0..c_5, a,b, MonomialOrder => Eliminate 6];
 
 -- INPUT: SPECIFY RATIONAL VALUES FOR THE VARIABLES BELOW:
 ----------------------------------------------------------
@@ -30,10 +30,12 @@ t_0 = u_0 + v_0;
 t_1 = u_1 + v_1;
 t_2 = u_2 + v_2;
 t_3 = u_3 + v_3;
+
 d_0 = u_0*v_0;
 d_1 = u_1*v_1;
 d_2 = u_2*v_2;
 d_3 = u_3*v_3;
+
 p = u_4 + u_5 + u_6;
 q = u_4*u_5*u_6;
 r = v_4 + v_5 + v_6;
@@ -86,31 +88,23 @@ formula_s = s*-(-c_3^2*c_2^2 - 3*a*c_0*b*c_5 + a*c_4*b*c_5 + b^3*c_3 - c_0^2*b^2
 invs = {formula_p, formula_q, formula_r, formula_s};
 
 
--- Ideals of relations:
+-- Ideal of relations:
 ----------------------
--- J is the ideal of relations from Jacobi:
-J = ideal(Rels) + ideal(gc);
-GBJ = selectInSubring(2, gens gb(J));  --eliminate 2 blocks
-elimJ = ideal(GBJ);
 
-gensJ = new Array from flatten entries GBJ;
-codimJ = codim elimJ;
-
--- We now add all the relations available to form I:
 I = ideal(Rels) + ideal(Eqs) + ideal(invs) + ideal(gc);
-GBI = selectInSubring(1, gens gb(I));  --eliminate 1 block
+GBI = selectInSubring(1, gens gb(I));  --eliminate variables w_i,x,y
 elimI = ideal(GBI);
-
-gensI = new Array from flatten entries GBI;
 codimI = codim elimI;
 
+-- Print generators of the elimination ideal:
+---------------------------------------------
+print "gens elimI:"
+print toString flatten entries GBI
 
--- Print all the relevant results:
-----------------------------------
-print "OUTPUT:"
-print toString codimJ
-print toString gensJ
-print toString codimI
-print toString gensI
+-- Print the result of the TEST
+-------------------------------
+
+print "OUTPUT"
+print {"codimI:", toString codimI}
 
 exit
