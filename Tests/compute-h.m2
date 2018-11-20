@@ -1,5 +1,5 @@
--- A case study : Gröbner basis for the Jacobi ideal and the polynomials h 
---------------------------------------------------------------------------
+-- Gröbner basis for the Jacobi ideal and the polynomials h 
+-----------------------------------------------------------
 
 gbTrace = 3; 
 printWidth = 0;
@@ -17,7 +17,7 @@ d_0 =
 d_1 = 
 d_2 = 
 d_3 = 
-
+----------------------------------------------------------
 
 -- Below are all the equations relating the above numbers to the variables a,b,c_k:
 -----------------------------------------------------------------------------------
@@ -74,7 +74,7 @@ I = J + ideal(Eqs);
 gb(I)
 -- Eliminate the auxiliary variables w_i:
 GBI = selectInSubring(1, gens gb(I));
--- Save the elements of GBI as a python list:
+-- Save the elements of GBI as a list:
 gensI = new Array from flatten entries GBI;
 
 -- We now compute the polynomials h one by one:

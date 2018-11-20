@@ -1,5 +1,5 @@
--- Code for test : decide if a collection is realizable or not
----------------------------------------------------------------
+-- Code for TEST : decide if a collection (u_0,v_0,...,u_6,v_6) is realizable or not
+------------------------------------------------------------------------------------
 
 gbTrace = 3;
 printWidth = 0;
@@ -23,6 +23,7 @@ u_5 =
 v_5 = 
 u_6 = 
 v_6 = 
+----------------------------------------------------------
 
 -- The above values define t,d,p,q,r,s as follows:
 t_0 = u_0 + v_0;
@@ -57,15 +58,18 @@ T_2 = t_2*(b+1);
 D_0 = d_0;
 D_1 = d_1*(a+1)^2;
 D_2 = d_2*(b+1)^2;
+
+-- We thus obtain the following equations
 Eq_0 = T_0 - (-c_0-c_5);
 Eq_1 = T_1 - (c_0+c_4-c_5);
 Eq_2 = T_2 - (-c_0+c_1+c_5);
 Eq_3 = D_0 - (-c_2*c_3+c_0*c_5);
 Eq_4 = D_1 - (-c_1*c_3+c_2*c_3+c_0*c_4-c_0*c_5);
 Eq_5 = D_2 - (c_2*c_3-c_2*c_4-c_0*c_5+c_1*c_5);
+
 Eqs = {Eq_0, Eq_1, Eq_2, Eq_3, Eq_4, Eq_5};
 
--- Some genericity assumptions: a,b and x+y-1 are non-zero
+-- Some genericity assumptions: a+1, b+1, a+b+1 and x+y-1 are non-zero
 gc = {(a+1)*w_0-1, (b+1)*w_1-1, (a+b+1)*w_2-1, (x+y-1)*w_3-1};
 
 

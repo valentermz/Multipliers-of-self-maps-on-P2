@@ -1,4 +1,4 @@
- # The Test
+# The Test
  
 In this directory we provide the code to perform the realizability test and to compute the polynomials `h`, as described in the paper.
 
