@@ -5,8 +5,7 @@
 
 # Verify that the imput is valid
 
-def test_input(Input):
-    global sage
+def test_input(Input, td_format):
     message = 'Input must be a list of 14 rational numbers'
     assert isinstance(Input, list), message
     assert len(Input) == 14, message
@@ -14,7 +13,7 @@ def test_input(Input):
         assert isinstance(Input[i], sage.rings.integer.Integer) or isinstance(
             Input[i], sage.rings.rational.Rational), message
     message = 'Eigenvalues cannot be zero'
-    if trace_determinant_format is False:
+    if td_format is False:
         for i in range(14):
             assert Input[i] != 0, message
     else:
@@ -27,9 +26,9 @@ def test_input(Input):
 
 # Check that the previously known relations are satisfied
 
-def test_old_relations(Input):
-    u, v = build_uv(Input)
-    t, d = build_td(Input)
+def test_old_relations(Input, td_format):
+    u, v = build_uv(Input, td_format)
+    t, d = build_td(Input, td_format)
     # Values that need to be checked:
     Lefschetz0 = sum(1 / d[i] for i in range(7))
     Lefschetz1 = sum(t[i] / d[i] for i in range(7))
@@ -49,23 +48,23 @@ def test_old_relations(Input):
 
 # Build necessary variables
 
-def build_uv(Input):
+def build_uv(Input, td_format):
     u = [0 for _ in range(7)]
     v = [0 for _ in range(7)]
     for i in range(7):
         u[i] = Input[2 * i]
         v[i] = Input[2 * i + 1]
-    if trace_determinant_format is True:
+    if td_format is True:
         for i in range(4):
             u[i] = None
             v[i] = None
     return (u, v)
 
 
-def build_td(Input):
+def build_td(Input, td_format):
     t = [0 for _ in range(7)]
     d = [0 for _ in range(7)]
-    if trace_determinant_format is False:
+    if td_format is False:
         for i in range(4):
             t[i] = Input[2 * i] + Input[2 * i + 1]
             d[i] = Input[2 * i] * Input[2 * i + 1]
@@ -82,29 +81,28 @@ def build_td(Input):
 
 # Print the value of the variables we work with
 
-def print_variables(Input):
+def print_variables(Input, td_format):
     print 'Input:', Input, '\n'
-    print 'trace_determinant_format is:', trace_determinant_format, '\n'
+    print 'td_format is:', td_format, '\n'
     print 'Value of the variables:\n'
 
-    u, v = build_uv(Input)
-    t, d = build_td(Input)
+    u, v = build_uv(Input, td_format)
+    t, d = build_td(Input, td_format)
 
     for i in range(4):
-        print 't_{} ='.format(i), eval('t_{}'.format(i))
-        print 'd_{} ='.format(i), eval('d_{}'.format(i))
+        print '\nt_{} ='.format(i), eval('t[{}]'.format(i))
+        print 'd_{} ='.format(i), eval('d[{}]'.format(i))
     for i in range(4, 7):
-        print 'u_{} ='.format(i), eval('u_{}'.format(i))
-        print 'v_{} ='.format(i), eval('v_{}'.format(i))
+        print '\nu_{} ='.format(i), eval('u[{}]'.format(i))
+        print 'v_{} ='.format(i), eval('v[{}]'.format(i))
 
 
 # Print the final result
 
-def print_result():
+def print_result(dim, g):
+    print 'Dimension of J =', dim, '\n'
+    print 'Generators of J:\n', g, '\n'
     if dim == -1:
-        passed = False
+        print 'Test FAILED'
     else:
-        passed = True
-    print 'Test passed:', passed, '\n'
-    if passed:
-        print 'Generators of J:\n', g
+        print 'Test PASSED'
