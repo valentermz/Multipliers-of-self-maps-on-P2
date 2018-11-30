@@ -84,7 +84,7 @@ def build_td(Input, td_format):
 def print_variables(Input, td_format):
     print 'Input:', Input, '\n'
     print 'td_format is:', td_format, '\n'
-    print 'Value of the variables:\n'
+    print 'Value of the variables:'
 
     u, v = build_uv(Input, td_format)
     t, d = build_td(Input, td_format)
