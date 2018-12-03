@@ -21,7 +21,8 @@ def test_input(Input, td_format):
             assert Input[2 * i + 1] != 0, message
         for i in range(8, 14):
             assert Input[i] != 0, message
-    return 'Input OK'
+    print 'Input OK'
+    return True
 
 
 # Check that the previously known relations are satisfied
@@ -43,7 +44,8 @@ def test_old_relations(Input, td_format):
     assert Relative_Lefschetz == 1, message.format('Relative_Lefschetz')
     assert Tangential_Lefschetz == 1, message.format('Tangential_Lefschetz')
     # If no error print OK
-    return 'All the previously known relations are satisfied'
+    print 'All the previously known relations are satisfied'
+    return True
 
 
 # Build necessary variables
@@ -75,7 +77,6 @@ def build_td(Input, td_format):
     for i in range(4, 7):
         t[i] = Input[2 * i] + Input[2 * i + 1]
         d[i] = Input[2 * i] * Input[2 * i + 1]
-
     return (t, d)
 
 
@@ -84,17 +85,17 @@ def build_td(Input, td_format):
 def print_variables(Input, td_format):
     print 'Input:', Input, '\n'
     print 'td_format is:', td_format, '\n'
-    print 'Value of the variables:'
+    print 'Value of the variables:\n'
 
     u, v = build_uv(Input, td_format)
     t, d = build_td(Input, td_format)
 
     for i in range(4):
-        print '\nt_{} ='.format(i), eval('t[{}]'.format(i))
-        print 'd_{} ='.format(i), eval('d[{}]'.format(i))
+        print 't_{} ='.format(i), eval('t[{}]'.format(i))
+        print 'd_{} ='.format(i), eval('d[{}]'.format(i)), '\n'
     for i in range(4, 7):
         print '\nu_{} ='.format(i), eval('u[{}]'.format(i))
-        print 'v_{} ='.format(i), eval('v[{}]'.format(i))
+        print 'v_{} ='.format(i), eval('v[{}]'.format(i)), '\n'
 
 
 # Print the final result
@@ -104,5 +105,7 @@ def print_result(dim, g):
     print 'Generators of J:\n', g, '\n'
     if dim == -1:
         print 'Test FAILED'
+        return False
     else:
         print 'Test PASSED'
+        return True
