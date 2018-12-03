@@ -17,8 +17,9 @@ td_format = True
 # Test if input is valid
 print ''
 test_input(Input, td_format)
+print ''
 test_old_relations(Input, td_format)
-
+print ''
 
 # Build necessary variables
 u, v = build_uv(Input, td_format)
@@ -85,9 +86,5 @@ I = ideal(Rel + Eq + Form + gc)
 J = I.elimination_ideal([w_0,w_1,w_2,w_3,x,y])
 
 
-# Extract variables of interest
-g = J.gens()
-dim = J.dimension()
-
 # Print final result
-print_result(dim, g)
+print_result(J)
