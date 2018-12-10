@@ -8,7 +8,6 @@ Compute the functions h relative to the four invariant functions:
     s = u_4*(v_5 + v_6) + u_5*(v_4 + v_6) + u_6*(v_4 + v_5)
 """
 
-
 # Provide input here
 Input = [-4, 3, -3/5, -4/25, 4/3, 1/3, 9, -60]  # Case study example
 td_format = True
@@ -88,6 +87,9 @@ hs = Js.gens()[0]
 
 
 # Final result #
+
+print 'Input given:', Input
+print 'td_format =', td_format, '\n'
 
 print 'Final result:\n'
 for k in range(4):
