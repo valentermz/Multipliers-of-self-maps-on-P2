@@ -10,8 +10,8 @@ auxiliary_definitions.sage = sage
 
 
 # Provide input here
-Input = [-4, 3, -3/5, -4/25, 4/3, 1/3, 9, -60, -2/3, -1/3, 2/3, -5/3, 1, 3]
-td_format = True    
+Input = [-4, 3, -3/5, -4/25, 4/3, 1/3, 9, -60, -2/3, -1/3, 2/3, -5/3, 1, 3]  # Case study example
+td_format = True
 
 
 # Test if input is valid
