@@ -18,3 +18,10 @@ This paper is about quadratic endomorphisms on the complex projective plane havi
 **TEST:** Given a collection of fourteen numbers `u_i, v_i`, `i=0,...,6`, test whether or not the collection may be realized as the multipliers of a quadratic endomorphism with an invariant line. 
 
 **Compute-h:** Given a collection of eight numbers `t_0, d_0, ..., t_3, d_3`, and a rational invariant function `sigma` on the variables `u_4, ..., v_6`, compute the degree four polynomial `h` that defines `sigma` as a multivalued function of `t, d`.
+
+
+## Software used
+
+Most of the computations have been carried out using *SageMath*, except some additional Gröbner basis computations, which were done using *Macaulay2*. You can get a distribution of these software here:  
+https://www.sagemath.org/  
+https://faculty.math.illinois.edu/Macaulay2/
