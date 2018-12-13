@@ -28,11 +28,9 @@ https://faculty.math.illinois.edu/Macaulay2/
 
 &nbsp;
 
-**Copyright**
-
 <sub>Copyright 2018 Adolfo Guillot and Valente Ramírez</sub>
 
-<sub>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at</sub>
+<sub>Licensed under the Apache License, Version 2.0 (the "License"); you may not use these files except in compliance with the License. You may obtain a copy of the License at</sub>
 
     http://www.apache.org/licenses/LICENSE-2.0
 
