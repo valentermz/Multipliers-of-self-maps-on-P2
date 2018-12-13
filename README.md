@@ -19,6 +19,9 @@ This paper is about quadratic endomorphisms on the complex projective plane havi
 
 **Compute-h:** Given a collection of eight numbers `t_0, d_0, ..., t_3, d_3`, and a rational invariant function `sigma` on the variables `u_4, ..., v_6`, compute the degree four polynomial `h` that defines `sigma` as a multivalued function of `t, d`.
 
+**Painleve-analysis:** As an application to the results established for self-maps on the projective plane, we have studied some ordinary differential equations in the complex domain and tried to determine those, within a particular class, which do not have multivalued solutions. This directory contains all the computations related to this application.
+
+
 
 ## Software used
 
