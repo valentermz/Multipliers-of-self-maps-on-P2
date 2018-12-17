@@ -101,19 +101,19 @@ def print_variables(Input, td_format):
 # Print the final result
 
 def print_result(J):
-    g = J.gens()
-    dim = J.dimension() - 6  # (since we eliminated 6 variables)
-    degs = [poly.degree() for poly in g]
-    print 'Dimension of J =', dim, '\n'
-    print 'Generators of J:\n'
-    print 'Found a basis with {} generators'.format(len(g))
-    print 'Degree of the generators:', degs, '\n'
-    print 'List of generators:'
-    print g, '\n'
-
-    if dim == -1:
-        print 'Test FAILED'
-        return False
-    else:
+    if J.dimension() != -1:
+        g = J.gens()
+        dim = J.dimension() - 6  # (since we eliminated 6 variables)
+        degs = [poly.degree() for poly in g]
+        print 'Dimension of J =', dim, '\n'
+        print 'Generators of J:\n'
+        print 'Found a basis with {} generators'.format(len(g))
+        print 'Degree of the generators:', degs, '\n'
+        print 'List of generators:'
+        print g, '\n'
         print 'Test PASSED'
         return True
+    else:
+        print 'Dimension of J = -1\n'
+        print 'Test FAILED'
+        return False
