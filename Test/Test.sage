@@ -25,7 +25,7 @@ class Sample:
         Input = self.Input
         td_format = self.td_format
 
-        error_message = 'Input must be a list of 14 rational numbers'
+        error_message = 'Error: Input must be a list of 14 rational numbers'
         if isinstance(Input, list) is False:
             print error_message
             return False
@@ -40,7 +40,7 @@ class Sample:
                 print error_message
                 return False
 
-        error_message = 'Eigenvalues cannot be zero'
+        error_message = 'Error: Eigenvalues cannot be zero'
         if td_format is False:
             for i in range(14):
                 if Input[i] == 0:
@@ -56,7 +56,7 @@ class Sample:
                     print error_message
                     return False
 
-        print 'Input OK'
+        print 'Input OK\n'
         return True
 
     # Construct the variables u,v,t,d from Input
@@ -84,19 +84,18 @@ class Sample:
     # Print to console the values of u,v,t,d that we will work with
 
     def print_variables(self):
-        print 'Input:', Input, '\n'
-        print 'td_format is:', td_format, '\n'
-        print 'Value of the variables:\n'
+        print 'Value of the variables:'
         
         t, d = self.t[:4], self.d[:4]
         u, v = self.u[4:], self.v[4:]
 
         for i in range(4):
             print 't_{} ='.format(i), eval('t[{}]'.format(i))
-            print 'd_{} ='.format(i), eval('d[{}]'.format(i)), '\n'
+            print 'd_{} ='.format(i), eval('d[{}]'.format(i))
         for i in range(3):
             print 'u_{} ='.format(i), eval('u[{}]'.format(i))
-            print 'v_{} ='.format(i), eval('v[{}]'.format(i)), '\n'
+            print 'v_{} ='.format(i), eval('v[{}]'.format(i))
+        print ''
 
     # Check that the previously known relations are satisfied
 
@@ -117,26 +116,27 @@ class Sample:
 
         # Do the check
         input_ok = True
-        error_message = 'Warning: Relation <{}> is not satisfied'
+        error_message = 'Warning: Relation "{}" is not satisfied'
         if Lefschetz0 != 1:
-            print error_message.format('Lefschetz0')
+            print error_message.format('Lefschetz 0')
             input_ok = False
         if Lefschetz1 != 4:
-            print error_message.format('Lefschetz1')
+            print error_message.format('Lefschetz 1')
             input_ok = False
         if Lefschetz2 != 16:
-            print error_message.format('Lefschetz2')
+            print error_message.format('Lefschetz 2')
             input_ok = False
         if Relative_Lefschetz != 1:
-            print error_message.format('Relative_Lefschetz')
+            print error_message.format('Relative Lefschetz')
             input_ok = False
         if Tangential_Lefschetz != 1:
-            print error_message.format('Tangential_Lefschetz')
+            print error_message.format('Tangential Lefschetz')
             input_ok = False
 
         # If no error print OK
         if input_ok is True:
             print 'All the previously known relations are satisfied'
+        print ''
 
     # Construct the ideals of relations
 
@@ -180,21 +180,33 @@ class Sample:
     # The Test
 
     def Test(self):
-        if self.I.dimension() != -1:
+        print 'Computing Groebner bases...\n'  # this could take a while
+
+        dimI = self.I.dimension()
+
+        if dimI != -1:
             I_elim = self.I.elimination_ideal(w)
             g = I_elim.gens()
-            dim = I_elim.dimension()
+            dim = dimI - 1  # minus one because we eliminated w (dim is wrt R)
             degs = [poly.degree() for poly in g]
             print 'Dimension of I =', dim, '\n'
-            print 'Generators of I:\n'
-            print 'Found a basis with {} generators'.format(len(g))
+            print 'Generators of I: Found a basis with {} generators'.format(len(g))
             print 'Degree of the generators:', degs, '\n'
             print 'List of generators:'
             print g, '\n'
             print 'Test PASSED'
-        else:
-            print 'Dimension of I = -1\n'
-            print 'Test FAILED'
+
+        else:  # dim(I) = -1
+            dimJ = self.J.dimension()
+            if dimJ != -1:
+                print 'Dimension of I = -1'
+                print 'Dimension of J = {}\n'.format(dimJ)
+                print 'Test PASSED'
+
+            else:  # both dimensions are -1
+                print 'Dimension of I = -1'
+                print 'Dimension of J = -1\n'
+                print 'Test NOT PASSED'
 
 
 # ##### End of Class Sample #####
@@ -221,7 +233,15 @@ def Perform_Full_Test(Input, td_format):
 # Main function
 
 if __name__ == '__main__':
-    Input = sage_eval(sys.argv[1])
+
+    print '\n{}: Test running...\n'.format(sys.argv[0])
+
+    try:
+        Input = sage_eval(sys.argv[1])
+    except NameError:
+        print 'Error: Input must be a list of 14 rational numbers'
+        sys.exit(1)
+
     td_format = eval(sys.argv[2])
 
     Perform_Full_Test(Input, td_format)
