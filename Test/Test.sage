@@ -1,13 +1,32 @@
-#! /usr/bin/env sage
+# -*- coding: utf-8 -*-
 
 import sys
+
+""" The Test.
+
+Script to test wether a collection of 14 rational numbers may be realized
+by a quadratic self-map with an invariant line.
+
+Usage: sage Test.sage <Input> <td_format>
+
+<Input>        A string representing a list with fourteen rational numbers
+<td_format>    A boolean (defualt=False)
+
+Examples:
+
+    sage Test.sage '[-4, 3, -3/5, -4/25, 4/3, 1/3, 9, -60, -2/3, -1/3, 2/3, -5/3, 1, 3]' True
+    sage Test.sage '[-9, 10, -9, 10, -9, 10, 1, 3, 4, 1, -4, 5, 1, 2]' False
+    sage Test.sage '[-3, 8, 1, 4, 2, 3, 2, 3, 11, -3, -11, 8, 1, 2]' False
+    sage Test.sage '[0, 1, 0, -1, 0, 1, 0, -1, 3, 1, 3, 1, 3, 1]' True
+    sage Test.sage '[0, 1, 0, -3, 0, -3, 0, -3, 3, 1, 3, 1, 3, 1]' True
+"""
 
 
 class Sample:
 
     """Instances of this class are 'samples' to be submitted to the Test"""
 
-    def __init__(self, Input, td_format):
+    def __init__(self, Input, td_format=False):
         """Initialize by providing a list of 14 rational numbers"""
         self.Input = Input
         self.td_format = td_format
@@ -25,7 +44,7 @@ class Sample:
         Input = self.Input
         td_format = self.td_format
 
-        error_message = 'Error: Input must be a list of 14 rational numbers'
+        error_message = 'test_input error: Input must be a list of 14 rational numbers'
         if isinstance(Input, list) is False:
             print error_message
             return False
@@ -40,7 +59,7 @@ class Sample:
                 print error_message
                 return False
 
-        error_message = 'Error: Eigenvalues cannot be zero'
+        error_message = 'test_input error: Eigenvalues cannot be zero'
         if td_format is False:
             for i in range(14):
                 if Input[i] == 0:
@@ -180,16 +199,15 @@ class Sample:
     # The Test
 
     def Test(self):
-        print 'Computing Groebner bases...\n'  # this could take a while
+        print 'Computing Gröbner bases...\n'  # this could take a while
 
         dimI = self.I.dimension()
 
         if dimI != -1:
             I_elim = self.I.elimination_ideal(w)
             g = I_elim.gens()
-            dim = dimI - 1  # minus one because we eliminated w (dim is wrt R)
             degs = [poly.degree() for poly in g]
-            print 'Dimension of I =', dim, '\n'
+            print 'Dimension of I =', dimI, '\n'
             print 'Generators of I: Found a basis with {} generators'.format(len(g))
             print 'Degree of the generators:', degs, '\n'
             print 'List of generators:'
@@ -216,7 +234,10 @@ R = QQ['w,c_0,c_1,c_2,c_3,c_4,c_5,a,b']
 (w, c_0, c_1, c_2, c_3, c_4, c_5, a, b) = R.gens()
 
 
-def Perform_Full_Test(Input, td_format):
+def Perform_Full_Test(Input, td_format=False):
+    """Create an instance of the class Sample using Input and td_format.
+    Build all necessary objects and call the function Test"""
+
     sample = Sample(Input, td_format)
 
     valid = sample.test_input()
@@ -230,7 +251,21 @@ def Perform_Full_Test(Input, td_format):
     sample.Test()
 
 
-# Main function
+usage_message = """
+Usage: sage Test.sage <Input> <td_format>
+
+<Input>        A string representing a list with fourteen rational numbers
+<td_format>    A boolean (defualt=False)
+
+Examples:
+
+    sage Test.sage '[-4, 3, -3/5, -4/25, 4/3, 1/3, 9, -60, -2/3, -1/3, 2/3, -5/3, 1, 3]' True
+    sage Test.sage '[-9, 10, -9, 10, -9, 10, 1, 3, 4, 1, -4, 5, 1, 2]' False
+    sage Test.sage '[-3, 8, 1, 4, 2, 3, 2, 3, 11, -3, -11, 8, 1, 2]' False
+    sage Test.sage '[0, 1, 0, -1, 0, 1, 0, -1, 3, 1, 3, 1, 3, 1]' True
+    sage Test.sage '[0, 1, 0, -3, 0, -3, 0, -3, 3, 1, 3, 1, 3, 1]' True
+"""
+
 
 if __name__ == '__main__':
 
@@ -238,10 +273,18 @@ if __name__ == '__main__':
 
     try:
         Input = sage_eval(sys.argv[1])
-    except NameError:
-        print 'Error: Input must be a list of 14 rational numbers'
+    except:
+        print '{} error: invalid input'.format(sys.argv[0])
+        print usage_message
         sys.exit(1)
 
-    td_format = eval(sys.argv[2])
+    if len(sys.argv) > 1:
+        td_format = eval(sys.argv[2])
+        if not isinstance(td_format, bool):
+            print '{} error: invalid input'.format(sys.argv[0])
+            print usage_message
+            sys.exit(2)
+    else:
+        td_format = False
 
     Perform_Full_Test(Input, td_format)
