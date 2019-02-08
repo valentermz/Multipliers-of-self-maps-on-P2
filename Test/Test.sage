@@ -10,7 +10,7 @@ by a quadratic self-map with an invariant line.
 Usage: sage Test.sage <Input> <td_format>
 
 <Input>        A string representing a list with fourteen rational numbers
-<td_format>    A boolean (defualt=False)
+<td_format>    A boolean (default=False)
 
 Examples:
 
@@ -255,7 +255,7 @@ usage_message = """
 Usage: sage Test.sage <Input> <td_format>
 
 <Input>        A string representing a list with fourteen rational numbers
-<td_format>    A boolean (defualt=False)
+<td_format>    A boolean (default=False)
 
 Examples:
 
