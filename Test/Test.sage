@@ -10,7 +10,8 @@ by a quadratic self-map with an invariant line.
 Usage: sage Test.sage <Input> <td_format>
 
 <Input>        A string representing a list with fourteen rational numbers
-<td_format>    A boolean (default=False)
+<td_format>    A boolean (optional, default=False)
+
 
 Examples:
 
@@ -37,7 +38,7 @@ class Sample:
 
     # We first verify that the Input is valid
 
-    def test_input(self):
+    def test_input(self, verbose=True):
         """Test wether the input given is a list of 14 rational numbers,
         and check that non-degeneracy conditions are satisfied"""
 
@@ -75,7 +76,8 @@ class Sample:
                     print error_message
                     return False
 
-        print 'Input OK\n'
+        if verbose is True:
+            print 'Input OK\n'
         return True
 
     # Construct the variables u,v,t,d from Input
@@ -198,33 +200,40 @@ class Sample:
 
     # The Test
 
-    def Test(self):
-        print 'Computing Gröbner bases...\n'  # this could take a while
+    def Test(self, verbose=True):
+        if verbose is True:
+            print 'Computing Gröbner bases...\n'  # this could take a while
 
         dimI = self.I.dimension()
 
         if dimI != -1:
-            I_elim = self.I.elimination_ideal(w)
-            g = I_elim.gens()
-            degs = [poly.degree() for poly in g]
-            print 'Dimension of I =', dimI, '\n'
-            print 'Generators of I: Found a basis with {} generators'.format(len(g))
-            print 'Degree of the generators:', degs, '\n'
-            print 'List of generators:'
-            print g, '\n'
-            print 'Test PASSED'
+            if verbose is True:
+                I_elim = self.I.elimination_ideal(w)
+                g = I_elim.gens()
+                degs = [poly.degree() for poly in g]
+                print 'Dimension of I =', dimI, '\n'
+                print 'Generators of I: Found a basis with {} generators'.format(len(g))
+                print 'Degree of the generators:', degs, '\n'
+                print 'List of generators:'
+                print g, '\n'
+                print 'Test PASSED'
+            return True
 
         else:  # dim(I) = -1
             dimJ = self.J.dimension()
             if dimJ != -1:
-                print 'Dimension of I = -1'
-                print 'Dimension of J = {}\n'.format(dimJ)
-                print 'Test PASSED'
+                if verbose is True:
+                    print 'Dimension of I = -1'
+                    print 'Dimension of J = {}\n'.format(dimJ)
+                    print 'Test PASSED'
+                return True
 
             else:  # both dimensions are -1
-                print 'Dimension of I = -1'
-                print 'Dimension of J = -1\n'
-                print 'Test NOT PASSED'
+                if verbose is True:
+                    print 'Dimension of I = -1'
+                    print 'Dimension of J = -1\n'
+                    print 'Test NOT PASSED'
+                return False
 
 
 # ##### End of Class Sample #####
@@ -234,28 +243,32 @@ R = QQ['w,c_0,c_1,c_2,c_3,c_4,c_5,a,b']
 (w, c_0, c_1, c_2, c_3, c_4, c_5, a, b) = R.gens()
 
 
-def Perform_Full_Test(Input, td_format=False):
+def Perform_Full_Test(Input, td_format=False, verbose=True):
     """Create an instance of the class Sample using Input and td_format.
     Build all necessary objects and call the function Test"""
 
     sample = Sample(Input, td_format)
 
-    valid = sample.test_input()
+    valid = sample.test_input(verbose)
     if not valid:
         return
 
     sample.build_vars()
-    sample.print_variables()
-    sample.test_old_relations()
+    if verbose is True:
+        sample.print_variables()
+        sample.test_old_relations()
     sample.build_ideals()
-    sample.Test()
+
+    result = sample.Test(verbose)
+
+    return result
 
 
 usage_message = """
 Usage: sage Test.sage <Input> <td_format>
 
 <Input>        A string representing a list with fourteen rational numbers
-<td_format>    A boolean (default=False)
+<td_format>    A boolean (optional, default=False)
 
 Examples:
 
@@ -278,10 +291,10 @@ if __name__ == '__main__':
         print usage_message
         sys.exit(1)
 
-    if len(sys.argv) > 1:
+    if len(sys.argv) > 2:
         td_format = eval(sys.argv[2])
         if not isinstance(td_format, bool):
-            print '{} error: invalid input'.format(sys.argv[0])
+            print '{} error: second argumet must be boolean'.format(sys.argv[0])
             print usage_message
             sys.exit(2)
     else:
