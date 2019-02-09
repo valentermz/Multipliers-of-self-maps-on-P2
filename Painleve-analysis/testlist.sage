@@ -23,6 +23,6 @@ for i in range(132):
     result = Test.Perform_Full_Test(S, True, verbose=False)
     if result is True:
         print 'Line {}: Test PASSED'.format(i+1)
-        # Perform_Full_Test(S, True, verbose=True)  # Uncomment to get more information each time the Test is passed
+        # Test.Perform_Full_Test(S, True, verbose=True)  # Uncomment to get more information each time the Test is passed
     
 listin.close()
