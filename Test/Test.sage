@@ -22,6 +22,9 @@ Examples:
     sage Test.sage '[0, 1, 0, -3, 0, -3, 0, -3, 3, 1, 3, 1, 3, 1]' True
 """
 
+aux_file = open(r'../Test/auxiliary_formulas.txt', 'r')
+Formulas = [line.rstrip('\n') for line in aux_file]
+
 
 class Sample:
 
@@ -163,15 +166,15 @@ class Sample:
 
     def build_ideals(self):
         """Use all the equations available to build I and J, ideals of R.
-        This requires the files 'formulas_td.txt' and formulas_eij.txt'"""
+        This requires the files 'auxiliary_formulas.txt'"""
 
         t_0, t_1, t_2, t_3 = self.t[:4]
         d_0, d_1, d_2, d_3 = self.d[:4]
         u_4, u_5, u_6 = self.u[4:]
         v_4, v_5, v_6 = self.v[4:]
 
-        # Import formulas for t,d as a list of strings
-        Formulas_td = [line.rstrip('\n') for line in open('formulas_td.txt')]
+        # Formulas for t,d in terms of the coefficients c
+        Formulas_td = Formulas[2:10]
 
         # Definition of the invariant functions e_{ij}
         e10 = u_4+u_5+u_6
@@ -184,8 +187,8 @@ class Sample:
         e21 = v_4*(u_5*u_6)+v_5*(u_6*u_4)+v_6*(u_4*u_5)
         e03 = v_4*v_5*v_6
 
-        # Import formulas for e_{i,j} as a list of strings
-        Formulas_eij = [line.rstrip('\n') for line in open('formulas_eij.txt')]
+        # Formulas for e_{i,j} in terms of coefficients c
+        Formulas_eij = Formulas[13:22]
 
         # Genericity assumption and degenerate case
         gc = [1 - w*(c_1^2*c_3*c_5+c_2*c_0*c_4^2+c_3^2*c_2^2-c_1*c_0*c_4*c_5-2*c_3*c_0*c_2*c_5+c_0^2*c_5^2-c_1*c_4*c_3*c_2)]
@@ -197,7 +200,7 @@ class Sample:
         Gens = [eval(expr) for expr in Formulas_td + Formulas_eij]
         self.I = ideal(Gens + gc)
         self.J = ideal(Gens + degen)
-
+        
     # The Test
 
     def Test(self, verbose=True):
