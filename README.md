@@ -3,7 +3,7 @@
 
 This repository is ancilliary to the paper
 
-* A. Guillot and V. Ramírez. _On the multipliers at fixed points of self-maps of the projective plane_ [arxiv](https://arxiv.org) 2018.
+* A. Guillot and V. Ramírez. _On the multipliers at fixed points of self-maps of the projective plane_
 
 This paper is about quadratic endomorphisms on the complex projective plane having an invariant line. We describe the algebraic relations among the multipliers of the fixed points and prove that these multipliers completely determine the linear equivalence class of the endomorphism.
 
@@ -15,7 +15,7 @@ This paper is about quadratic endomorphisms on the complex projective plane havi
 
 **Jacobi\-system:** We analyze the polynomial equations obtained from the Jacobi formula. We prove that the variable `b` satisfies a quadratic equation and that the value of the variable `a` and the position of the fourth fixed point can be recovered from the value of `b`.
 
-**TEST:** Given a collection of fourteen numbers `u_i, v_i`, `i=0,...,6`, test whether or not the collection may be realized as the multipliers of a quadratic endomorphism with an invariant line. 
+**Test:** Given a collection of fourteen numbers `u_i, v_i`, `i=0,...,6`, test whether or not the collection may be realized as the multipliers of a quadratic endomorphism with an invariant line. 
 
 **Compute-h:** Given a collection of eight numbers `t_0, d_0, ..., t_3, d_3`, and a rational invariant function `sigma` on the variables `u_4, ..., v_6`, compute the degree four polynomial `h` that defines `sigma` as a multivalued function of `t, d`.
 
