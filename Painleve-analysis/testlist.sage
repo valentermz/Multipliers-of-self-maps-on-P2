@@ -5,9 +5,19 @@
 # Make sure the generated file is called Test.py and not Tesst.sage.py (rename manually if necessary)
 
 import imp
+import sys
+import os
 
-Test = imp.load_source('Test', '../Test/Test.sage.py')
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
+module_path = os.path.join(dir_path, '../Test/Test.sage.py')
+
+try:
+    Test = imp.load_source('Test', module_path)
+except IOError:
+    print('Warning: Please build Test.sage.py first.')
+    print('Run: sage --preparse /path/to/Test/Test.sage')
+    sys.exit()
 
 # from Test import *
 
