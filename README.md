@@ -26,9 +26,17 @@ This paper is about quadratic endomorphisms on the complex projective plane havi
 
 ## Software used
 
-Most of the computations have been carried out using *SageMath*, except some additional Gröbner basis computations, which were done using *Macaulay2*. You can get a distribution of these software here:  
+Most of the computations have been carried out using *SageMath*, except some additional Gröbner basis computations, which were done using *Macaulay2* directly. You can get a distribution of these software here:  
 https://www.sagemath.org/  
 https://faculty.math.illinois.edu/Macaulay2/
+
+
+
+### Binder
+
+You can interact with this repository by clicking on the Binder badge above. Once the repository is built you can open the Jupyter notebooks directly or open a terminal to run the scripts.
+
+You can learn more about Binder here: https://mybinder.org/
 
 &nbsp;
 
