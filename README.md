@@ -1,6 +1,6 @@
 # Multipliers at fixed points of self-maps of the projective plane
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/valentermz/Multipliers-of-self-maps-on-P2/binder)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/valentermz/Multipliers-of-self-maps-on-P2/master)
 
 This repository is ancilliary to the paper
 
